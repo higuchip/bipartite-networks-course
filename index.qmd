@@ -1,0 +1,1475 @@
+---
+title: "Análise de Redes Ecológicas Bipartidas"
+subtitle: "Ferramentas para Conservação e Restauração"
+author: "Prof. Pedro Higuchi"
+institute: "PPGEF - UDESC"
+date: "2025-11-17"
+format:
+  revealjs:
+    theme: [default, custom.css]
+    transition: fade
+    slide-number: c/t
+    chalkboard: false
+    preview-links: false
+    footer: "PPGEF/UDESC"
+    smaller: false
+    scrollable: false
+    controls: false
+    progress: true
+    history: true
+    center: false
+    touch: true
+    loop: false
+    rtl: false
+    navigation-mode: linear
+    keyboard: true
+    hash-one-based-index: false
+    respond-to-hash-changes: true
+    jump-to-slide: true
+    view-distance: 3
+    mobile-view-distance: 2
+    width: 1400
+    height: 900
+    margin: 0.1
+    menu:
+      side: left
+      width: normal
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+---
+
+```{r setup, include=FALSE}
+# Verificar e instalar pacotes necessários
+pacotes <- c("bipartite", "igraph", "vegan", "dplyr", "ggplot2", "knitr", "DiagrammeR")
+novos_pacotes <- pacotes[!(pacotes %in% installed.packages()[,"Package"])]
+if(length(novos_pacotes)) install.packages(novos_pacotes)
+
+# Carregar pacotes
+library(bipartite)
+library(igraph)
+library(vegan)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(DiagrammeR)
+
+# Configurações
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 12,
+  fig.height = 8
+)
+
+# Seed para reprodutibilidade
+set.seed(42)
+```
+
+# Parte 1: Introdução {.center background-color="#2C5F2D"}
+
+## Neste curso...
+
+**O que vamos aprender?**
+
+-   História e contexto das redes ecológicas
+-   Conceitos fundamentais e métricas
+-   Aplicações práticas com R
+
+**Objetivos de Aprendizagem**
+
+1.  Compreender a estrutura de redes bipartidas
+2.  Calcular e interpretar métricas ecológicas
+3.  Aplicar modelos nulos
+4.  Identificar espécies-chave para conservação
+
+## Uma História Real: O Mistério de Darwin
+
+**Madagascar, 1862**
+
+![](Angraecum_sesquipedale_Thouars,_Hist._Orchid._66_(1822)_(45713158794).jpg){width="60%"}
+
+-   Darwin recebe a orquídea *Angraecum sesquipedale*
+-   Nectário de **30 cm** de profundidade!
+-   **Previsão ousada:** Deve existir uma mariposa com espirotromba de 30 cm
+
+**A comunidade científica era cética...**
+
+::: image-credits
+**Crédito:** © sunoochi, Sapporo (CC BY 2.0)
+:::
+
+## A Descoberta: 41 Anos Depois
+
+**Madagascar, 1903**
+
+![](Xanthopan_morganii_praedicta_Sep_16_2021_03-58PM.jpeg){width="60%"}
+
+-   Descoberta de *Xanthopan morganii praedicta*
+-   Espirotromba de exatos **30 cm** - exatamente como previsto!
+-   Nome da subespécie: *praedicta* (do latim "predito")
+
+**Primeira evidência científica de coevolução**
+
+::: image-credits
+**Crédito:** © Nesnad (CC BY 4.0)
+:::
+
+## A Lição de Darwin
+
+> "Espécies não evoluem isoladamente: elas se transformam em resposta às pressões exercidas umas pelas outras ao longo de milhões de anos."
+
+**Implicações:**
+
+-   Plantas e animais evoluem em resposta uns aos outros
+-   Perder um parceiro pode levar à extinção do outro
+-   **Redes de interação são essenciais para a conservação**
+
+## Por que Estudar Redes de Interação? 🤔
+
+**Quatro razões fundamentais:**
+
+1.  🔬 Entender a natureza
+2.  🛡️ Conservar biodiversidade\
+3.  🌾 Serviços ecossistêmicos
+4.  🌲 Aplicações profissionais
+
+## 1. Entender a Organização da Natureza 🔬
+
+**Perguntas fundamentais:**
+
+-   Como espécies coexistem?
+-   Quem interage com quem?
+-   Existem padrões universais?
+
+**Por que importa:**\
+Base teórica para todas as aplicações práticas
+
+## 2. Conservação da Biodiversidade 🛡️
+
+**Perguntas práticas:**
+
+-   Quais espécies são mais importantes?
+-   O que acontece se uma espécie desaparecer?
+-   Como restaurar ecossistemas?
+
+## 3. Serviços Ecossistêmicos 🌾
+
+**Dispersão de sementes:** - Viabiliza regeneração natural - Economia: plantio total (US\$ 2.000-3.000/ha) (Brancalion et al. 2019)
+
+**Polinização:** - R\$ 43 bilhões/ano no Brasil (Wolowski et al., 2019)
+
+**Controle biológico:** - Prejuízo causado pela vespa da madeira: US\$ 53 milhões/ano (Embrapa)
+
+## 4. Aplicações em Engenharia Florestal 🌲
+
+**Áreas de atuação:**
+
+-   [x] **Restauração** - Seleção de espécies por função (redução de custos)
+-   [x] **Manejo de UCs** - Diagnóstico e monitoramento funcional
+-   [x] **SAF e Silvicultura** - Desenho de sistemas produtivos
+-   [x] **Licenciamento ambiental** - Avaliação de impactos funcionais em EIA/RIMA
+-   [x] **Manejo de PFNM** - Conservação de processos ecológicos (dispersão, polinização)
+
+**Mercado:** 12 milhões de ha a restaurar até 2030 (NDC Brasil - Acordo de Paris, 2016)
+
+## História das Redes Ecológicas
+
+**Anos 1920-1950: Primeiras Observações** - Teias alimentares e cadeias tróficas - Primeiras redes de polinização documentadas
+
+**Anos 1970-1980: Formalização Matemática** - Modelos de estabilidade de redes - Análise estrutural de teias alimentares
+
+## História das Redes Ecológicas
+
+**Anos 1990-2000: Era Digital** - Descoberta de padrões de aninhamento - Métricas de especialização em redes
+
+**Anos 2010-presente: Big Data** - Análises globais de redes - Impactos das mudanças climáticas - Dinâmica temporal de interações
+
+## O que são Redes Ecológicas?
+
+**Definição:**
+
+> "Representação gráfica de quem interage com quem em uma comunidade ecológica"
+
+**Componentes:**
+
+-   **Nós (vértices):** Espécies
+-   **Ligações (arestas):** Interações
+-   **Pesos:** Intensidade/frequência
+
+## O que são Redes Ecológicas?
+
+**Tipos principais:**
+
+1.  **Unipartidas:** 🐒 ↔ 🐒 ↔ 🐒 (mesmo tipo de organismo)
+
+2.  **Bipartidas:** 🌺 ↔ 🐝 (dois tipos diferentes) 🎯
+
+3.  **Multipartidas:** 🌱 ↔ 🐛 ↔ 🐦 (três ou mais níveis)
+
+**Essa aula: Foco em BIPARTIDAS!**
+
+## Tipos de Redes Bipartidas
+
+::::: columns
+::: {.column width="50%"}
+**Mutualísticas (+/+)**
+
+-   Polinização
+-   Dispersão de sementes
+-   Formiga-planta
+-   Micorrizas
+
+*Ambas espécies se beneficiam*
+:::
+
+::: {.column width="50%"}
+**Antagonísticas (+/-)**
+
+-   Herbivoria
+-   Parasitismo
+-   Patógenos
+
+*Uma se beneficia, outra prejudicada*
+:::
+:::::
+
+**Nossa aula:** Foco em **FRUGIVORIA** (mutualismo)
+
+Animais comem frutos → dispersam sementes → regeneração florestal
+
+## Por que Frugivoria?
+
+**Importância Ecológica:**
+
+-   **Maioria das árvores tropicais** dependem de animais
+-   Determina composição florestal futura
+-   Conecta fragmentos florestais (corredores)
+-   Mantém diversidade genética
+
+## Por que Frugivoria?
+
+**Importância Econômica:**
+
+-   Regeneração de áreas degradadas
+-   Produção de frutos nativos
+-   Ecoturismo (observação de aves)
+
+**Ameaças:**
+
+-   Perda de frugívoros grandes (defaunação)
+-   Fragmentação de habitats
+-   Mudanças climáticas
+
+## Contexto: Floresta com Araucária
+
+::::: columns
+::: {.column width="50%"}
+**Floresta Ombrófila Mista**
+
+-   Maior extensão, Sul do Brasil (PR, SC, RS)
+-   Altitude: 500-1.400m
+-   Temperatura: 15-18°C
+-   **\<10% da área original**
+
+**Espécie emblemática:**
+
+*Araucaria angustifolia*
+:::
+
+::: {.column width="50%"}
+**Frugívoros importantes:**
+
+-   Gralha-azul (*Cyanocorax caeruleus*)
+-   Tucanos e papagaios
+-   Macacos (bugio, macaco-prego)
+-   Morcegos
+
+**Ameaças:**
+
+-   Fragmentação extrema
+-   Perda de fauna
+-   Necessidade urgente de restauração
+:::
+:::::
+
+## Exercício para hoje
+
+**Pergunta Científica:**
+
+> "Como está estruturada a rede de frugivoria em um fragmento de Floresta com Araucária? Existem espécies-chave para a regeneração florestal?"
+
+**Dados simulados para fins didáticos:**
+
+-   24 espécies de aves
+-   13 espécies de mamíferos
+-   33 espécies de árvores
+
+# Parte 2: Conceitos Fundamentais {.center background-color="#2C5F2D"}
+
+## Anatomia de uma Rede Bipartida
+
+```{r echo=FALSE, fig.width=12, fig.height=8}
+# Exemplo baseado em interações reais da FOM
+exemplo <- matrix(c(25, 4, 6, 10,   # Gralha-azul - especialista em Araucaria
+                    2, 15, 20, 12,  # Sabiá - generalista, forte em Prunus
+                    1, 12, 18, 8,   # Sanhaço - Prunus e Ocotea
+                    12, 3, 4, 15),  # Papagaio - Araucaria e Ilex
+                  nrow=4, byrow=TRUE,
+                  dimnames=list(
+                    c("Gralha-azul", "Sabiá", "Sanhaço", "Papagaio"),
+                    c("Araucaria", "Ocotea", "P. myrtifolia", "Ilex")
+                  ))
+plotweb(exemplo, 
+        method="normal",
+        text.rot=90,
+        col.high = "#FF6B6B",
+        col.low = "#4ECDC4",
+        bor.col.high = "#C44569",
+        bor.col.low = "#227C9D",
+        y.lim=c(-1,3))
+```
+
+**Elementos:** Aves (topo) \| Árvores (base) \| Linhas = interações
+
+## Representações de Redes
+
+**Três formas de visualizar a mesma rede:**
+
+:::::: columns
+::: {.column width="33%"}
+**1. Matriz**
+
+```{r echo=FALSE}
+kable(exemplo, caption="Frequência de visitas")
+```
+:::
+
+::: {.column width="33%"}
+**2. Grafo Bipartido**
+
+(vimos no slide anterior)
+
+-   Visualização ecológica
+-   Fácil interpretação
+-   Boa para apresentações
+:::
+
+::: {.column width="33%"}
+**3. Lista de Arestas**
+
+```         
+Gralha-azul - Araucaria: 25
+Gralha-azul - Ocotea: 4
+Gralha-azul - P. myrtifolia: 6
+Gralha-azul - Ilex: 10
+...
+```
+
+-   Formato de banco de dados
+:::
+::::::
+
+## Tipos de Espécies na Rede: Generalistas 🌟
+
+Interagem com **muitas** espécies \| Dieta ampla e flexível \| Ex: Sabiá-laranjeira
+
+::::: columns
+::: {.column width="50%"}
+**Características:**
+
+-   **Alto grau (degree):** Visitam muitas plantas diferentes
+-   **Alta força (strength):** Somando todas interações, são muito ativos
+-   **Baixa especialização:** Não dependem de uma única planta
+:::
+
+::: {.column width="50%"}
+**Papel ecológico:**
+
+-   **Conectividade da rede:** Ligam diferentes módulos, integrando a comunidade
+-   **Redundância funcional:** Múltiplos dispersores por planta - "backup" ecológico
+-   **Resiliência do sistema:** Mantêm dispersão mesmo com perda de outras espécies
+:::
+:::::
+
+## Tipos de Espécies na Rede: Especialistas 🎯
+
+Interagem com **poucas** espécies \| Dieta restrita \| Ex: Gralha-azul e pinhão
+
+::::: columns
+::: {.column width="50%"}
+**Características:**
+
+-   **Baixo grau (degree):** Visitam poucas espécies
+-   **Força variável (strength):** Podem fazer muitas visitas, mas só em uma planta
+-   **Alta especialização:** Relação forte e exclusiva
+:::
+
+::: {.column width="50%"}
+**Papel ecológico:**
+
+-   **Vulneráveis à extinção:** Se a planta desaparece, a ave também
+-   **Coevolução forte:** Adaptações mútuas (bico ↔ pinhão)
+-   **Indicadores de qualidade:** Presença indica ecossistema preservado
+:::
+:::::
+
+## Propriedades Emergentes em uma Rede
+
+**Propriedades que surgem da rede como um todo:**
+
+| Propriedade | Pergunta Ecológica | Métrica (R) | Interpretação |
+|-----------------|----------------------|-----------------|-----------------|
+| **Conectância** | Quão conectada é a rede? | `connectance` | 0-1: proporção de interações possíveis que ocorrem |
+| **Aninhamento** | Especialistas visitam as mesmas plantas que generalistas? | `weighted NODF` | 0-100: quanto maior, mais aninhada |
+| **Modularidade** | Existem sub-comunidades especializadas? | `modularity` | \>0.4: módulos bem definidos |
+| **Especialização** | Quão seletivas são as interações? | `H2` | 0-1: (0=generalista, 1=especialista) |
+
+**Exemplo de como calcular:** `networklevel(matriz, index = "connectance")`
+
+## Conceito-Chave: Aninhamento
+
+**O que é?**
+
+Padrão onde as interações dos especialistas são **subconjuntos** das interações dos generalistas.
+
+```{r echo=FALSE, fig.width=10, fig.height=8}
+# Criar matriz aninhada
+nested <- matrix(c(1,1,1,1,1,1,
+                   0,1,1,1,1,1,
+                   0,0,1,1,1,1,
+                   0,0,0,1,1,1,
+                   0,0,0,0,1,1,
+                   0,0,0,0,0,1),
+                 nrow=6, byrow=TRUE,
+                 dimnames=list(
+                   paste0("A", 1:6),
+                   paste0("P", 1:6)
+                 ))
+
+visweb(nested, type="nested", text="none", square="b")
+```
+
+**Especialista A6** interage apenas com **P1** \| **Generalista A1** interage com **todas**
+
+## Por que Aninhamento Importa?
+
+**Rede ANINHADA** ✅
+
+```{r echo=FALSE, fig.width=8, fig.height=6}
+visweb(nested, type="nested", text="none", square="b")
+```
+
+**Características:**
+
+-   **Perda de especialista = baixo impacto:** Outras espécies compensam
+-   **Generalistas sustentam rede:** Mantêm conectividade mesmo com extinções
+-   **Maior resiliência:** Rede tolera perturbações
+
+## Por que Aninhamento Importa?
+
+**Rede MODULAR** ⚠️
+
+```{r echo=FALSE, fig.width=8, fig.height=6}
+# Criar matriz modular
+modular <- matrix(c(1,1,1,0,0,0,
+                    1,1,1,0,0,0,
+                    1,1,1,0,0,0,
+                    0,0,0,1,1,1,
+                    0,0,0,1,1,1,
+                    0,0,0,1,1,1),
+                  nrow=6, byrow=TRUE,
+                  dimnames=list(
+                    paste0("A", 1:6),
+                    paste0("P", 1:6)
+                  ))
+visweb(modular, type="nested", text="none", square="b")
+```
+
+**Características:**
+
+-   **Extinção em cascata:** Perda de uma espécie afeta todo o módulo
+-   **Módulos isolados:** Pouca redundância funcional
+-   **Menor resiliência:** Rede vulnerável a perturbações
+
+## Conceito-Chave: Especialização (H2)
+
+**O que é?** Índice que mede o **grau de seletividade** nas interações da rede.
+
+$$H2 = \frac{H2'}{H2'_{max}}$$
+
+**Interpretação prática:**
+
+| Valor            | Significado             | Exemplo              |
+|------------------|-------------------------|----------------------|
+| **H2 ≈ 0**       | Generalismo total       | Interações ao acaso  |
+| **H2 = 0.3-0.6** | Especialização moderada | Típico em frugivoria |
+| **H2 ≈ 1**       | Especialização perfeita | Relações exclusivas  |
+
+**Base:** Entropia de Shannon
+
+## Visualizando Especialização
+
+```{r echo=FALSE, fig.width=12, fig.height=8}
+# Criar três redes com diferentes níveis de especialização
+par(mfrow=c(1,3))
+
+# Baixa especialização
+low <- matrix(rpois(36, 5), nrow=6, ncol=6)
+plotweb(low, method="normal")
+title(main="Baixa Especialização\n(H2 ≈ 0.2)")
+
+# Média especialização
+medium <- nested * rpois(36, 8)
+plotweb(medium, method="normal")
+title(main="Média Especialização\n(H2 ≈ 0.5)")
+
+# Alta especialização
+high <- diag(6) * 10
+plotweb(high, method="normal")
+title(main="Alta Especialização\n(H2 ≈ 1.0)")
+
+par(mfrow=c(1,1))
+```
+
+## Conceitos em Nível de Espécie
+
+**Métricas para avaliar o papel de cada espécie na rede:**
+
+| Métrica | O que mede? | Nome no R | Interpretação |
+|-----------------|------------------|-----------------|---------------------|
+| **Grau** | Quantos parceiros? | `degree` | Número de espécies com que interage |
+| **Força** | Quão ativa? | `species strength` | Soma total de interações |
+| **PDI** | Quão seletiva? | `PDI` | 0=generalista, 1=especialista |
+| **Centralidade** | Quão importante estruturalmente? | `betweenness` | Papel como "ponte" na rede |
+
+**Como calcular:** `specieslevel(matriz, index = "degree")`
+
+**Exemplo prático:** Sabiá tem alto grau (visita várias plantas) + alta força (muitas visitas) = espécie-chave por causa da por CONECTIVIDADE!
+
+## Conceito-Chave: Centralidade
+
+**Centralidade** = importância como **"ponte"** entre diferentes partes da rede
+
+::::: columns
+::: {.column width="50%"}
+**ALTA centralidade** 🌉
+
+-   Liga grupos diferentes
+-   Caminho obrigatório
+-   **Perda → rede fragmenta**
+
+**Ex:** Ave ligando Lauraceae (dossel) ↔ Myrtaceae (sub-bosque)
+:::
+
+::: {.column width="50%"}
+**BAIXA centralidade** 🔗
+
+-   Redundante
+-   Não é ponte essencial
+-   **Perda → outras compensam**
+
+**Ex:** Sabiá visitando Myrtaceae com outras 5 espécies
+:::
+:::::
+
+**Conservação:** Priorizar espécies centrais!
+
+## O que "Circula" via Centralidade?
+
+**Espécies centrais facilitam fluxos ecológicos:**
+
+| Tipo de Fluxo | Exemplo em Lages |
+|---------------------------------|---------------------------------------|
+| **Subsídio energético** | *Sp. 1* (inverno) + *Sp. 2* (primavera) + *Sp. 3* (verão) → recursos complementares mantêm Sabiá ativo ano todo |
+| **Populações viáveis** | Fenologia complementar de Aquifoliaceae + Lauraceae + Myrtaceae sustenta população de dispersores generalistas |
+| **Cascatas** | Defaunação de generalistas → falha regeneração simultânea de múltiplas famílias (Lauraceae, Myrtaceae, Rosaceae) |
+| **Propágulos** | Gralha-azul move pinhão entre capões distantes |
+| **Resiliência** | Falha reprodutiva de algumas espécies compensada por outras |
+
+**Centralidade = integração funcional da floresta!**
+
+## Espécies-Chave para Conservação
+
+**Como identificar espécies prioritárias?**
+
+| Tipo | Características | Métricas | Papel Ecológico | Exemplo |
+|--------------|----------------|--------------|----------------|--------------|
+| **Generalistas Ativos** | Muitos parceiros + muitas interações | Alto grau + alta força | Mantêm rede conectada | Sabiá-laranjeira |
+| **Especialistas Fortes** | Poucos parceiros + interações intensas | Baixo grau + alta força | Vulneráveis mas únicos | Gralha-azul ↔ Araucaria |
+| **Conectores** | Ligam diferentes módulos | Alta centralidade (betweenness) | Integram sub-redes | Ave ligando dossel-solo |
+
+**Estratégia:** Priorizar todos os 3 tipos - cada um tem função única!
+
+## Resumo dos Conceitos 📝
+
+| Conceito        | Nível   | O que mede                | Valores |
+|-----------------|---------|---------------------------|---------|
+| **Conectância** | Rede    | Densidade de conexões     | 0-1     |
+| **H2**          | Rede    | Especialização geral      | 0-1     |
+| **Nestedness**  | Rede    | Padrão de subconjuntos    | 0-100   |
+| **Grau**        | Espécie | Número de parceiros       | 1-N     |
+| **PDI**         | Espécie | Especialização individual | 0-1     |
+| **Força**       | Espécie | Total de interações       | \>0     |
+
+**Próximo:** Vamos criar nossos dados e calcular tudo isso! 💪
+
+# Parte 3: Criando Dados Didáticos {.center background-color="#2C5F2D"}
+
+**Duração: 20 minutos**
+
+## Nosso Dataset Didático: Floresta com Araucária
+
+**Vamos simular uma rede de frugivoria!**
+
+**Cenário:**
+
+-   Fragmento florestal em Lages-SC
+-   Altitude: 920m
+-   Método: observação focal de árvores frutificando
+
+**Comunidade:**
+
+-   **37 espécies de frugívoros** (24 aves + 13 mamíferos)
+-   **33 espécies de árvores** produtoras de frutos
+-   Dados de frequência de visitação
+
+## Passo 1: Criar Lista de Espécies
+
+```{r}
+# ============================================
+# CRIAR COMUNIDADE DE FRUGÍVOROS
+# ============================================
+
+# AVES (24 espécies)
+aves <- c(
+  # Grandes frugívoros
+  "Ramphastos dicolorus",      # Tucano-de-bico-verde
+  "Amazona vinacea",           # Papagaio-de-peito-roxo
+  "Amazona pretrei",           # Papagaio-charão
+  "Cyanocorax caeruleus",      # Gralha-azul
+  
+  # Médios frugívoros
+  "Turdus rufiventris",        # Sabiá-laranjeira
+  "Turdus albicollis",         # Sabiá-coleira
+  "Turdus amaurochalinus",     # Sabiá-poca
+  "Euphonia chlorotica",       # Fim-fim
+  "Euphonia cyanocephala",     # Gaturamo-rei
+  "Tangara sayaca",            # Sanhaço-cinzento
+  "Pipraeidea melanonota",     # Saíra-viúva
+  "Dacnis cayana",             # Saí-azul
+  
+  # Pequenos frugívoros
+  "Elaenia flavogaster",       # Guaracava
+  "Myiodynastes maculatus",    # Bem-te-vi-rajado
+  "Pitangus sulphuratus",      # Bem-te-vi
+  "Tyrannus melancholicus",    # Suiriri
+  
+  # Beija-flores (especialistas)
+  "Thalurania glaucopis",      # Beija-flor-de-fronte-violeta
+  "Leucochloris albicollis",   # Beija-flor-de-papo-branco
+  "Stephanoxis lalandi",       # Beija-flor-de-topete
+  
+  # Outros
+  "Pyroderus scutatus",        # Pavó
+  "Procnias nudicollis",       # Araponga
+  "Selenidera maculirostris",  # Araçari-poca
+  "Penelope obscura",          # Jacuaçu
+  "Columba livia"              # Pomba-doméstica
+)
+
+# MAMÍFEROS (13 espécies)
+mamiferos <- c(
+  # Primatas
+  "Alouatta guariba",          # Bugio-ruivo
+  "Sapajus nigritus",          # Macaco-prego
+  
+  # Morcegos frugívoros
+  "Artibeus lituratus",        # Morcego-grande-de-listra
+  "Artibeus fimbriatus",       # Morcego-das-frutas-grande
+  "Sturnira lilium",           # Morcego-de-ombros-amarelos
+  "Carollia perspicillata",    # Morcego-cauda-curta
+  "Platyrrhinus lineatus",     # Morcego-de-listra-branca
+  
+  # Roedores
+  "Dasyprocta azarae",         # Cutia
+
+  # Marsupiais
+  "Didelphis albiventris",     # Gambá-de-orelha-branca
+  
+  # Carnívoros
+  "Nasua nasua",               # Quati
+  "Procyon cancrivorus",       # Mão-pelada
+  "Eira barbara",              # Irara
+  "Leopardus wiedii"           # Gato-maracajá
+)
+
+# Juntar todos
+frugivoros <- c(aves, mamiferos)
+
+cat("Total de frugívoros:", length(frugivoros), "\n")
+cat("- Aves:", length(aves), "\n")
+cat("- Mamíferos:", length(mamiferos), "\n")
+```
+
+## Passo 2: Criar Lista de Árvores
+
+```{r}
+# ============================================
+# CRIAR COMUNIDADE DE ÁRVORES
+# ============================================
+
+arvores <- c(
+  # Myrtaceae (frutos carnosos, muito visitados)
+  "Eugenia uniflora",          # Pitangueira
+  "Eugenia pyriformis",        # Uvaia
+  "Campomanesia xanthocarpa",  # Guabiroba
+  "Myrcia splendens",          # Cambuí-vermelho
+  "Myrcianthes pungens",       # Guabiju
+  "Myrcia palustris",          # Cambuí
+  
+  # Lauraceae (frutos importantes para aves grandes)
+  "Ocotea pulchella",          # Canela-lageana
+  "Nectandra megapotamica",    # Canela-imbuia
+  "Ocotea puberula",           # Canela-guaicá
+  
+  # Araucariaceae (pinhão - recurso sazonal importante)
+  "Araucaria angustifolia",    # Araucária
+  
+  # Aquifoliaceae
+  "Ilex paraguariensis",       # Erva-mate
+  "Ilex microdonta",           # Caúna-miúda
+  "Ilex theezans",             # Caúna
+  
+  # Rosaceae
+  "Prunus myrtifolia",         # Pessegueiro-bravo
+  
+  # Sapindaceae
+  "Cupania vernalis",          # Camboatá
+  "Allophylus edulis",         # Chal-chal
+  
+  # Solanaceae (pioneiras, muito produtivas)
+  "Solanum pseudoquina",       # Joá
+  "Solanum sanctaecatharinae", # Joá-manso
+  "Solanum variabile",         # Joá-de-árvore
+  
+  # Salicaceae
+  "Casearia decandra",         # Guaçatunga
+  "Xylosma ciliatifolia",      # Sucará
+  
+  # Celastraceae
+  "Maytenus ilicifolia",       # Espinheira-santa
+  "Schaefferia argentinensis", # Sombreiro
+  
+  # Outras famílias importantes
+  "Schinus terebinthifolia",   # Aroeira-vermelha (Anacardiaceae)
+  "Lithraea brasiliensis",     # bugreiro (Anacardiaceae)
+  "Zanthoxylum rhoifolium",    # Mamica-de-cadela (Rutaceae)
+  "Myrsine coriacea",          # Capororoca (Primulaceae)
+  "Myrsine umbellata",         # Capororoquinha (Primulaceae)
+  "Drimys brasiliensis",       # Casca-d'anta (Winteraceae)
+  "Roupala montana",      # Carvalho-brasileiro (Proteaceae)
+  "Sebastiania commersoniana", # Branquilho (Euphorbiaceae)
+  "Matayba elaeagnoides",      # Camboatá-branco (Sapindaceae)
+  "Styrax leprosus"            # Carne-de-vaca (Styracaceae)
+)
+
+cat("Total de árvores:", length(arvores), "\n")
+```
+
+## Passo 3: Criar Matriz de Interações
+
+```{r}
+# ============================================
+# CRIAR MATRIZ DE INTERAÇÕES REALISTA
+# ============================================
+
+# Dimensões
+n_frug <- length(frugivoros)
+n_arv <- length(arvores)
+
+# Criar matriz vazia
+matriz_frugivoria <- matrix(0,
+                            nrow = n_frug,
+                            ncol = n_arv,
+                            dimnames = list(frugivoros, arvores))
+
+# ============================================
+# ESTRATÉGIA DE PREENCHIMENTO REALISTA
+# ============================================
+
+# 1. GENERALISTAS (10% das espécies) - muitas interações
+n_generalistas <- round(n_frug * 0.10)
+generalistas_idx <- 1:n_generalistas
+
+for(i in generalistas_idx) {
+  # Generalistas interagem com 40-60% das plantas
+  n_parceiros <- sample(round(n_arv * 0.4):round(n_arv * 0.6), 1)
+  parceiros <- sample(1:n_arv, n_parceiros)
+  
+  # Frequência de visitas: alta
+  matriz_frugivoria[i, parceiros] <- rpois(n_parceiros, lambda = 8)
+}
+
+# 2. MODERADOS (60% das espécies) - interações médias
+moderados_idx <- (n_generalistas + 1):round(n_frug * 0.70)
+
+for(i in moderados_idx) {
+  # Moderados interagem com 15-35% das plantas
+  n_parceiros <- sample(round(n_arv * 0.15):round(n_arv * 0.35), 1)
+  parceiros <- sample(1:n_arv, n_parceiros)
+  
+  # Frequência de visitas: média
+  matriz_frugivoria[i, parceiros] <- rpois(n_parceiros, lambda = 4)
+}
+
+# 3. ESPECIALISTAS (30% das espécies) - poucas interações
+especialistas_idx <- (round(n_frug * 0.70) + 1):n_frug
+
+for(i in especialistas_idx) {
+  # Especialistas interagem com 5-15% das plantas
+  n_parceiros <- sample(round(n_arv * 0.05):round(n_arv * 0.15), 1)
+  n_parceiros <- max(n_parceiros, 1)  # Pelo menos 1 parceiro
+  parceiros <- sample(1:n_arv, n_parceiros)
+  
+  # Frequência de visitas: variável (alguns muito especializados)
+  if(runif(1) > 0.7) {
+    # 30% dos especialistas têm uma interação muito forte
+    matriz_frugivoria[i, parceiros] <- c(rpois(1, lambda = 15),
+                                         rpois(n_parceiros-1, lambda = 2))
+  } else {
+    matriz_frugivoria[i, parceiros] <- rpois(n_parceiros, lambda = 3)
+  }
+}
+
+# ============================================
+# AJUSTES ECOLÓGICOS REALISTAS
+# ============================================
+
+# Araucária: especialistas importantes (Gralha-azul, papagaios, cutia)
+araucaria_idx <- which(colnames(matriz_frugivoria) == "Araucaria angustifolia")
+gralha_idx <- which(rownames(matriz_frugivoria) == "Cyanocorax caeruleus")
+cutia_idx <- which(rownames(matriz_frugivoria) == "Dasyprocta azarae")
+
+matriz_frugivoria[gralha_idx, araucaria_idx] <- 45  # Interação muito forte
+matriz_frugivoria[cutia_idx, araucaria_idx] <- 38
+
+# Myrtaceae: muito visitadas por tucanos e sabiás
+myrtaceae_idx <- grep("Eugenia|Psidium|Campomanesia|Myrcia", 
+                     colnames(matriz_frugivoria))
+tucanos_idx <- grep("Ramphastos", rownames(matriz_frugivoria))
+sabias_idx <- grep("Turdus", rownames(matriz_frugivoria))
+
+for(i in tucanos_idx) {
+  parceiros_myr <- sample(myrtaceae_idx, 
+                         min(4, length(myrtaceae_idx)))
+  matriz_frugivoria[i, parceiros_myr] <- 
+    matriz_frugivoria[i, parceiros_myr] + rpois(length(parceiros_myr), 5)
+}
+
+# Remover alguns zeros para criar rede mais realista
+# (algumas espécies raras sem interações observadas)
+especies_raras <- sample(1:n_frug, round(n_frug * 0.05))
+for(i in especies_raras) {
+  if(sum(matriz_frugivoria[i, ]) < 5) {
+    matriz_frugivoria[i, ] <- 0
+  }
+}
+
+# Remover espécies sem nenhuma interação
+matriz_frugivoria <- matriz_frugivoria[rowSums(matriz_frugivoria) > 0, ]
+matriz_frugivoria <- matriz_frugivoria[, colSums(matriz_frugivoria) > 0]
+
+# Estatísticas da rede
+cat("\n=== ESTATÍSTICAS DA REDE CRIADA ===\n")
+cat("Dimensões finais:", nrow(matriz_frugivoria), "×", 
+    ncol(matriz_frugivoria), "\n")
+cat("Total de interações:", sum(matriz_frugivoria > 0), "\n")
+cat("Total de visitas:", sum(matriz_frugivoria), "\n")
+cat("Conectância:", round(sum(matriz_frugivoria > 0) / 
+    (nrow(matriz_frugivoria) * ncol(matriz_frugivoria)), 3), "\n")
+```
+
+## Visualizar Nossos Dados Simulados
+
+```{r fig.width=12, fig.height=8}
+# Visualizar matriz
+visweb(matriz_frugivoria,
+       type = "nested",
+       labsize = 0.8,
+       text = "none",
+       square = "b")
+title(main = "Rede de Frugivoria - Floresta com Araucária\n(Dados Didáticos)")
+```
+
+## Primeiras Impressões da Rede 👀
+
+```{r}
+# Quantas espécies de frugívoros?
+nrow(matriz_frugivoria)
+
+# Quantas espécies de árvores?
+ncol(matriz_frugivoria)
+
+# Quantas interações diferentes foram observadas?
+sum(matriz_frugivoria > 0)
+
+# Qual o total de visitas registradas?
+sum(matriz_frugivoria)
+```
+
+## Distribuição de Interações
+
+```{r}
+# Distribuição de parceiros por frugívoro (quantas plantas cada ave/mamífero visitou?)
+summary(rowSums(matriz_frugivoria > 0))
+
+# Distribuição de visitantes por árvore (quantos frugívoros visitaram cada planta?)
+summary(colSums(matriz_frugivoria > 0))
+```
+
+# Parte 4: Análises de Rede {.center background-color="#2C5F2D"}
+
+**Duração: 45 minutos**
+
+## Métricas de Nível de Rede
+
+**Calcular propriedades da rede com `networklevel()`:**
+
+```{r}
+# Calcular todas as métricas de uma vez
+metricas_rede <- networklevel(
+  matriz_frugivoria,
+  index = c("connectance", "weighted connectance", "H2",
+            "weighted NODF", "links per species")
+)
+```
+
+## Conectividade da Rede
+
+```{r}
+# Quão conectada é a rede? (proporção de links possíveis que existem)
+metricas_rede["connectance"]
+
+# Conectância ponderada (considerando intensidade das interações)
+metricas_rede["weighted connectance"]
+
+# Média de parceiros por espécie
+metricas_rede["links per species"]
+```
+
+## Especialização e Aninhamento
+
+```{r}
+# H2: Especialização da rede (0=generalista, 1=especialista)
+metricas_rede["H2"]
+
+# NODF: Aninhamento (0-100, quanto maior mais aninhada)
+metricas_rede["weighted NODF"]
+```
+
+## Interpretando H2
+
+```{r}
+h2_valor <- metricas_rede["H2"]
+
+cat("=== INTERPRETAÇÃO DO H2 ===\n\n")
+cat("Valor observado:", round(h2_valor, 3), "\n\n")
+
+if(h2_valor < 0.3) {
+  interpretacao <- "BAIXA especialização\n  → Rede com interações generalistas\n  → Espécies com dietas amplas\n  → Baixa seletividade"
+} else if(h2_valor < 0.6) {
+  interpretacao <- "MODERADA especialização\n  → Mix de generalistas e especialistas\n  → Padrão comum em redes mutualísticas\n  → Rede com estrutura intermediária"
+} else {
+  interpretacao <- "ALTA especialização\n  → Interações muito seletivas\n  → Forte potencial para coevolução\n  → Rede altamente estruturada"
+}
+
+cat(interpretacao, "\n\n")
+
+
+```
+
+## Interpretando Aninhamento
+
+```{r}
+# Valor de NODF observado
+nodf_valor <- metricas_rede["weighted NODF"]
+nodf_valor
+
+# Classificação automática
+if(nodf_valor < 20) {
+  cat("BAIXO aninhamento → Estrutura mais modular")
+} else if(nodf_valor < 40) {
+  cat("MODERADO aninhamento → Hierarquia parcial")
+} else {
+  cat("ALTO aninhamento → Hierarquia clara")
+}
+```
+
+## Implicações do Aninhamento para Conservação
+
+```{r}
+# O que significa para conservação?
+if(nodf_valor > 30) {
+  cat("✓ Rede ANINHADA\n\n")
+  cat("  • Perda de especialistas tem impacto menor\n")
+  cat("  • Generalistas mantêm conectividade\n")
+  cat("  • Rede relativamente estável\n")
+} else {
+  cat("⚠ Rede POUCO ANINHADA - Atenção!\n\n")
+  cat("  • Rede mais vulnerável\n")
+  cat("  • Extinções podem causar efeitos em cascata\n")
+}
+```
+
+## Visualização: Rede Completa 🕸️
+
+```{r fig.width=14, fig.height=9}
+# Criar visualização mais elaborada
+plotweb(matriz_frugivoria,
+        method = "normal",
+        text.rot = 90,
+        col.interaction = "grey80",
+        bor.col.interaction = "grey60",
+        col.high = "#FF6B6B",      # Frugívoros em vermelho
+        col.low = "#4ECDC4",       # Árvores em azul
+        bor.col.high = "#C44569",
+        bor.col.low = "#227C9D",
+        labsize = 0.7,
+        y.lim = c(-1, 3))
+title(main = paste0("Rede de Frugivoria - Floresta com Araucária\n",
+                   "H2 = ", round(h2_valor, 3),
+                   " | NODF = ", round(nodf_valor, 1),
+                   " | Conectância = ",
+                   round(metricas_rede["weighted connectance"], 3)))
+```
+
+## Métricas de Nível de Espécie
+
+**Calcular métricas para cada espécie:**
+
+```{r}
+# Calcular com specieslevel()
+metricas_especies <- specieslevel(
+  matriz_frugivoria,
+  index = c("degree", "species strength", "PDI")
+)
+```
+
+## Separando Frugívoros e Árvores
+
+```{r}
+# Separar os dois níveis tróficos
+# higher level = parte de cima do grafo (árvores)
+# lower level = parte de baixo do grafo (frugívoros)
+arv_metrics <- as.data.frame(metricas_especies$`higher level`)
+frug_metrics <- as.data.frame(metricas_especies$`lower level`)
+
+# Adicionar coluna com nomes das espécies
+frug_metrics$especie <- rownames(frug_metrics)
+arv_metrics$especie <- rownames(arv_metrics)
+
+# Quantas espécies foram analisadas?
+nrow(frug_metrics)  # Frugívoros
+nrow(arv_metrics)   # Árvores
+```
+
+## Top 10 Frugívoros Mais Importantes 🦜
+
+```{r}
+# Ordenar por força (strength)
+top_frug <- frug_metrics %>%
+  arrange(desc(species.strength)) %>%
+  head(10) %>%
+  select(especie, degree, species.strength, PDI)
+
+# Formatar tabela
+kable(top_frug, 
+      digits = 3,
+      col.names = c("Espécie", "Grau", "Força", "PDI"),
+      caption = "Top 10 Frugívoros por Força de Interação")
+```
+
+**Interpretação:**
+
+-   **Força alta** = muitas visitas totais (dispersor importante)
+-   **Grau alto** = muitas espécies visitadas (generalista)
+-   **PDI baixo** = generalista \| **PDI alto** = especialista
+
+## Top 10 Árvores Mais Visitadas
+
+```{r}
+# Ordenar por força (strength)
+top_arv <- arv_metrics %>%
+  arrange(desc(species.strength)) %>%
+  head(10) %>%
+  select(especie, degree, species.strength, PDI)
+
+# Formatar tabela
+kable(top_arv, 
+      digits = 3,
+      col.names = c("Espécie", "Grau", "Força", "PDI"),
+      caption = "Top 10 Árvores por Frequência de Visitação")
+```
+
+**Interpretação:**
+
+-   **Força alta** = recurso muito usado
+-   **Grau alto** = visitada por muitos frugívoros
+-   **PDI baixo** = generalista \| **PDI alto** = especialista
+
+## Identificando Espécies-Chave
+
+```{r fig.width=12, fig.height=8}
+# Classificar frugívoros
+frug_metrics <- frug_metrics %>%
+  mutate(
+    tipo = case_when(
+      degree >= quantile(degree, 0.75) & 
+        species.strength >= quantile(species.strength, 0.75) ~ "Super-generalista",
+      degree >= quantile(degree, 0.75) ~ "Generalista",
+      species.strength >= quantile(species.strength, 0.75) ~ "Especialista forte",
+      TRUE ~ "Periférico"
+    )
+  )
+
+# Plotar
+ggplot(frug_metrics, aes(x = degree, y = species.strength, 
+                        color = tipo, size = PDI)) +
+  geom_point(alpha = 0.7) +
+  scale_color_manual(values = c(
+    "Super-generalista" = "#FF6B6B",
+    "Generalista" = "#4ECDC4",
+    "Especialista forte" = "#FFE66D",
+    "Periférico" = "#95E1D3"
+  )) +
+  labs(
+    title = "Identificação de Espécies-Chave de Frugívoros",
+    subtitle = "Baseado em Grau e Força de Interação",
+    x = "Grau (número de parceiros)",
+    y = "Força (total de interações)",
+    color = "Tipo funcional",
+    size = "Especialização (PDI)"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+```
+
+## Distribuição de Especialização (PDI)
+
+```{r fig.width=12, fig.height=8}
+par(mfrow = c(1, 2))
+
+# Histograma frugívoros
+hist(frug_metrics$PDI,
+     breaks = 15,
+     col = "#FF6B6B",
+     border = "white",
+     main = "Especialização dos Frugívoros",
+     xlab = "PDI (0 = generalista, 1 = especialista)",
+     ylab = "Frequência",
+     xlim = c(0, 1))
+abline(v = mean(frug_metrics$PDI), col = "darkred", lwd = 2, lty = 2)
+legend("topright", legend = paste("Média =", round(mean(frug_metrics$PDI), 2)),
+       col = "darkred", lty = 2, lwd = 2)
+
+# Histograma árvores
+hist(arv_metrics$PDI,
+     breaks = 15,
+     col = "#4ECDC4",
+     border = "white",
+     main = "Especialização das Árvores",
+     xlab = "PDI (0 = generalista, 1 = especialista)",
+     ylab = "Frequência",
+     xlim = c(0, 1))
+abline(v = mean(arv_metrics$PDI), col = "darkblue", lwd = 2, lty = 2)
+legend("topright", legend = paste("Média =", round(mean(arv_metrics$PDI), 2)),
+       col = "darkblue", lty = 2, lwd = 2)
+
+par(mfrow = c(1, 1))
+```
+
+## Comparação: Frugívoros vs Árvores
+
+```{r}
+# Os dois grupos têm especialização diferente?
+teste_pdi <- t.test(frug_metrics$PDI, arv_metrics$PDI)
+teste_pdi
+```
+
+# Parte 5: Modelos Nulos {.center background-color="#2C5F2D"}
+
+## Por que Modelos Nulos?
+
+**Pergunta:** O H2 que encontramos é significativo ou apenas acaso?
+
+**Solução:** Comparar com o esperado ao acaso (modelo nulo)
+
+**Como funciona:**
+
+1.  Aleatoriza matriz 1000 vezes
+2.  Calcula H2 para cada matriz aleatória
+3.  Compara observado vs. distribuição nula
+4.  **p \< 0.05** = padrão REAL (não aleatório)
+
+## Teste Nulo para H2
+
+```{r}
+# Executar teste nulo (pode demorar ~1 min)
+set.seed(123)
+null_test_h2 <- null.t.test(
+  matriz_frugivoria,
+  index = "H2",
+  nrep = 100,
+  N = 100  # Reduzir para 100 se demorar muito
+)
+
+# Resultado direto
+null_test_h2
+```
+
+## Visualização do Modelo Nulo
+
+```{r fig.width=12, fig.height=8}
+# Gerar distribuição nula
+set.seed(456)
+nulls <- nullmodel(matriz_frugivoria, N = 100, method = 1)
+null_H2 <- sapply(nulls, function(x) networklevel(x, index = "H2"))
+null_H2 <- null_H2[is.finite(null_H2)]
+
+# Valor observado
+h2_obs <- as.numeric(null_test_h2["observed"])
+
+# Histograma
+hist(null_H2, breaks = 40, col = "lightblue", border = "white",
+     main = "H2: Observado vs. Esperado ao Acaso",
+     xlab = "H2 (Especialização)", ylab = "Frequência")
+abline(v = h2_obs, col = "red", lwd = 3, lty = 2)
+abline(v = mean(null_H2), col = "blue", lwd = 2, lty = 3)
+legend("topright",
+       legend = c("Observado", "Média Nula"),
+       col = c("red", "blue"), lty = c(2, 3), lwd = c(3, 2))
+```
+
+# Parte 6: Aplicações Práticas {.center background-color="#2C5F2D"}
+
+**Duração: 25 minutos**
+
+## Aplicação 1: Priorização para Conservação 🛡️
+
+**Como identificar espécies-chave para conservação?**
+
+::::: columns
+::: {.column width="50%"}
+**Critérios:**
+
+-   **Grau**: Quantas plantas visitam
+-   **Força**: Intensidade de interações
+-   **Índice**: Combinação ponderada
+:::
+
+::: {.column width="50%"}
+**Categorias:**
+
+-   Crítico: ≥ 0.75
+-   Alto: 0.50-0.75
+-   Médio: 0.25-0.50
+-   Baixo: \< 0.25
+:::
+:::::
+
+```{r}
+# Criar índice de prioridade
+frug_prioridade <- frug_metrics %>%
+  mutate(
+    degree_norm = (degree - min(degree)) / (max(degree) - min(degree)),
+    strength_norm = (species.strength - min(species.strength)) /
+                    (max(species.strength) - min(species.strength)),
+    prioridade = (degree_norm * 0.4) + (strength_norm * 0.6),
+    categoria = case_when(
+      prioridade >= 0.75 ~ "Crítico",
+      prioridade >= 0.50 ~ "Alto",
+      prioridade >= 0.25 ~ "Médio",
+      TRUE ~ "Baixo"
+    )
+  ) %>%
+  arrange(desc(prioridade))
+
+# Top 10 prioritários
+frug_prioridade %>%
+  head(10) %>%
+  select(especie, degree, species.strength, prioridade, categoria)
+```
+
+## Aplicação 2: Planejamento de Restauração 🌱
+
+**Quais espécies arbóreas plantar primeiro?**
+
+**Critério:** Árvores visitadas por muitos frugívoros diferentes
+
+```{r}
+# Criar índice de restauração
+arv_restauracao <- arv_metrics %>%
+  mutate(
+    degree_norm = (degree - min(degree)) / (max(degree) - min(degree)),
+    strength_norm = (species.strength - min(species.strength)) /
+                    (max(species.strength) - min(species.strength)),
+    # Priorizamos diversidade de visitantes (grau)
+    indice_restauracao = (degree_norm * 0.7) + (strength_norm * 0.3),
+    categoria = case_when(
+      indice_restauracao >= 0.75 ~ "Prioritária",
+      indice_restauracao >= 0.50 ~ "Importante",
+      indice_restauracao >= 0.25 ~ "Complementar",
+      TRUE ~ "Opcional"
+    )
+  ) %>%
+  arrange(desc(indice_restauracao))
+
+# Top 12 para restauração
+arv_restauracao %>%
+  head(12) %>%
+  select(especie, degree, indice_restauracao, categoria)
+```
+
+## Fases de Restauração
+
+**Sequência temporal de plantio:**
+
+1.  **Prioritárias** (anos 1-2)
+    -   Atraem maior diversidade de dispersores
+    -   Iniciam cascata de regeneração
+2.  **Importantes** (anos 3-5)
+    -   Complementam recursos ao longo do ano
+    -   Suportam espécies especialistas
+3.  **Complementares** (anos 5+)
+    -   Preenchem nichos vazios
+    -   Completam a estrutura da rede
+
+## Aplicação 3: Simulação de Extinção ⚠️
+
+**O que acontece se perdermos uma espécie-chave?**
+
+```{r}
+# Função simples de simulação
+simular_extincao <- function(matriz, especie) {
+  if(!especie %in% rownames(matriz)) return(NULL)
+
+  # Remover espécie e plantas órfãs
+  matriz_nova <- matriz[rownames(matriz) != especie, ]
+  matriz_nova <- matriz_nova[, colSums(matriz_nova) > 0]
+
+  # Calcular impacto
+  list(
+    plantas_perdidas = ncol(matriz) - ncol(matriz_nova),
+    metricas = networklevel(matriz_nova, index = c("H2", "weighted NODF"))
+  )
+}
+```
+
+**Conceito:** Remover espécie e recalcular métricas da rede
+
+## Resultado da Simulação
+
+```{r}
+# Simular extinção de espécie prioritária
+metricas_orig <- networklevel(matriz_frugivoria, index = c("H2", "weighted NODF"))
+especie_teste <- frug_prioridade$especie[
+  frug_prioridade$especie %in% rownames(matriz_frugivoria)
+][1]
+resultado <- simular_extincao(matriz_frugivoria, especie_teste)
+
+# Impacto
+cat("Espécie:", especie_teste, "\n")
+cat("Plantas perdidas:", resultado$plantas_perdidas, "\n\n")
+cat("H2:", round(metricas_orig["H2"], 3), "→", round(resultado$metricas["H2"], 3), "\n")
+cat("NODF:", round(metricas_orig["weighted NODF"], 1), "→",
+    round(resultado$metricas["weighted NODF"], 1), "\n")
+```
+
+## Aplicação 4: Defaunação e Fragmentação 🗺️
+
+**Cenário:** Fragmentos florestais perdem grandes frugívoros (mamíferos são mais vulneráveis)
+
+```{r}
+# Simular defaunação: mamíferos desaparecem primeiro
+# (mais sensíveis à fragmentação, caça e área reduzida)
+mamiferos_rede <- rownames(matriz_frugivoria)[
+  rownames(matriz_frugivoria) %in% mamiferos
+]
+
+cat("Mamíferos na rede original:", length(mamiferos_rede), "\n")
+cat("Simulação: perder TODOS os mamíferos\n\n")
+
+# Criar matriz sem mamíferos (área fragmentada)
+matriz_fragmento <- matriz_frugivoria[
+  !rownames(matriz_frugivoria) %in% mamiferos_rede,
+]
+matriz_fragmento <- matriz_fragmento[, colSums(matriz_fragmento) > 0]
+
+cat("Espécies restantes:", nrow(matriz_fragmento), "(só aves)\n")
+cat("Plantas que perderam dispersores:", ncol(matriz_frugivoria) - ncol(matriz_fragmento), "\n")
+```
+
+## Impacto na Estrutura da Rede
+
+```{r}
+# Comparar métricas
+met_intacta <- networklevel(matriz_frugivoria, index = c("H2", "NODF"))
+met_fragmento <- networklevel(matriz_fragmento, index = c("H2", "NODF"))
+
+cat("Área Intacta → Fragmento (só aves):\n\n")
+cat("H2:", round(met_intacta["H2"], 2), "→", round(met_fragmento["H2"], 2), "\n")
+cat("NODF:", round(met_intacta["NODF"], 1), "→", round(met_fragmento["NODF"], 1), "\n")
+```
+
+**Interpretação:** Perda de mamíferos = perda de função ecológica completa
+
+# Síntese {.center background-color="#2C5F2D"}
+
+## O que aprendemos
+
+::: {.columns}
+::: {.column width="33%"}
+**Conceitos**
+
+- Redes bipartidas
+- Aninhamento
+- Especialização
+- Modelos nulos
+:::
+
+::: {.column width="33%"}
+**Métricas**
+
+- H2 (especialização)
+- NODF (aninhamento)
+- Grau, Força, PDI
+- Testes de significância
+:::
+
+::: {.column width="33%"}
+**Aplicações**
+
+- Conservação
+- Restauração
+- Extinções
+- Defaunação
+:::
+:::
+
+**Ferramenta:** Pacote `bipartite` (R)
+
+## Obrigado!
+
+**Dúvidas?**
+
+Contato: **higuchip@gmail.com**
+
