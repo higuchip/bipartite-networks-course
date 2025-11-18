@@ -48,7 +48,5 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 
-# Quarto output files
-index_files/
-index.html
+# Quarto output files (keep index.html and index_files/ for GitHub Pages)
 README.html

@@ -1,0 +1,2541 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/tabby.min.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.25">
+
+  <meta name="author" content="Prof.&nbsp;Pedro Higuchi">
+  <meta name="dcterms.date" content="2025-11-17">
+  <title>Análise de Redes Ecológicas Bipartidas</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-ce48ccdd58dd620c73894e9b135d6499.css">
+  <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Análise de Redes Ecológicas Bipartidas</h1>
+  <p class="subtitle">Ferramentas para Conservação e Restauração</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Prof.&nbsp;Pedro Higuchi 
+</div>
+        <p class="quarto-title-affiliation">
+            PPGEF - UDESC
+          </p>
+    </div>
+</div>
+
+  <p class="date">2025-11-17</p>
+</section>
+<section>
+<section id="parte-1-introdução" class="title-slide slide level1 center" data-background-color="#2C5F2D">
+<h1>Parte 1: Introdução</h1>
+
+</section>
+<section id="neste-curso" class="slide level2">
+<h2>Neste curso…</h2>
+<p><strong>O que vamos aprender?</strong></p>
+<ul>
+<li>História e contexto das redes ecológicas</li>
+<li>Conceitos fundamentais e métricas</li>
+<li>Aplicações práticas com R</li>
+</ul>
+<p><strong>Objetivos de Aprendizagem</strong></p>
+<ol type="1">
+<li>Compreender a estrutura de redes bipartidas</li>
+<li>Calcular e interpretar métricas ecológicas</li>
+<li>Aplicar modelos nulos</li>
+<li>Identificar espécies-chave para conservação</li>
+</ol>
+</section>
+<section id="uma-história-real-o-mistério-de-darwin" class="slide level2">
+<h2>Uma História Real: O Mistério de Darwin</h2>
+<p><strong>Madagascar, 1862</strong></p>
+
+<img data-src="Angraecum_sesquipedale_Thouars,_Hist._Orchid._66_(1822)_(45713158794).jpg" style="width:60.0%" class="r-stretch"><ul>
+<li>Darwin recebe a orquídea <em>Angraecum sesquipedale</em></li>
+<li>Nectário de <strong>30 cm</strong> de profundidade!</li>
+<li><strong>Previsão ousada:</strong> Deve existir uma mariposa com espirotromba de 30 cm</li>
+</ul>
+<p><strong>A comunidade científica era cética…</strong></p>
+<div class="image-credits">
+<p><strong>Crédito:</strong> © sunoochi, Sapporo (CC BY 2.0)</p>
+</div>
+</section>
+<section id="a-descoberta-41-anos-depois" class="slide level2">
+<h2>A Descoberta: 41 Anos Depois</h2>
+<p><strong>Madagascar, 1903</strong></p>
+
+<img data-src="Xanthopan_morganii_praedicta_Sep_16_2021_03-58PM.jpeg" style="width:60.0%" class="r-stretch"><ul>
+<li>Descoberta de <em>Xanthopan morganii praedicta</em></li>
+<li>Espirotromba de exatos <strong>30 cm</strong> - exatamente como previsto!</li>
+<li>Nome da subespécie: <em>praedicta</em> (do latim “predito”)</li>
+</ul>
+<p><strong>Primeira evidência científica de coevolução</strong></p>
+<div class="image-credits">
+<p><strong>Crédito:</strong> © Nesnad (CC BY 4.0)</p>
+</div>
+</section>
+<section id="a-lição-de-darwin" class="slide level2">
+<h2>A Lição de Darwin</h2>
+<blockquote>
+<p>“Espécies não evoluem isoladamente: elas se transformam em resposta às pressões exercidas umas pelas outras ao longo de milhões de anos.”</p>
+</blockquote>
+<p><strong>Implicações:</strong></p>
+<ul>
+<li>Plantas e animais evoluem em resposta uns aos outros</li>
+<li>Perder um parceiro pode levar à extinção do outro</li>
+<li><strong>Redes de interação são essenciais para a conservação</strong></li>
+</ul>
+</section>
+<section id="por-que-estudar-redes-de-interação" class="slide level2">
+<h2>Por que Estudar Redes de Interação? 🤔</h2>
+<p><strong>Quatro razões fundamentais:</strong></p>
+<ol type="1">
+<li>🔬 Entender a natureza</li>
+<li>🛡️ Conservar biodiversidade<br>
+</li>
+<li>🌾 Serviços ecossistêmicos</li>
+<li>🌲 Aplicações profissionais</li>
+</ol>
+</section>
+<section id="entender-a-organização-da-natureza" class="slide level2">
+<h2>1. Entender a Organização da Natureza 🔬</h2>
+<p><strong>Perguntas fundamentais:</strong></p>
+<ul>
+<li>Como espécies coexistem?</li>
+<li>Quem interage com quem?</li>
+<li>Existem padrões universais?</li>
+</ul>
+<p><strong>Por que importa:</strong><br>
+Base teórica para todas as aplicações práticas</p>
+</section>
+<section id="conservação-da-biodiversidade" class="slide level2">
+<h2>2. Conservação da Biodiversidade 🛡️</h2>
+<p><strong>Perguntas práticas:</strong></p>
+<ul>
+<li>Quais espécies são mais importantes?</li>
+<li>O que acontece se uma espécie desaparecer?</li>
+<li>Como restaurar ecossistemas?</li>
+</ul>
+</section>
+<section id="serviços-ecossistêmicos" class="slide level2">
+<h2>3. Serviços Ecossistêmicos 🌾</h2>
+<p><strong>Dispersão de sementes:</strong> - Viabiliza regeneração natural - Economia: plantio total (US$ 2.000-3.000/ha) (Brancalion et al.&nbsp;2019)</p>
+<p><strong>Polinização:</strong> - R$ 43 bilhões/ano no Brasil (Wolowski et al., 2019)</p>
+<p><strong>Controle biológico:</strong> - Prejuízo causado pela vespa da madeira: US$ 53 milhões/ano (Embrapa)</p>
+</section>
+<section id="aplicações-em-engenharia-florestal" class="slide level2">
+<h2>4. Aplicações em Engenharia Florestal 🌲</h2>
+<p><strong>Áreas de atuação:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" checked=""><strong>Restauração</strong> - Seleção de espécies por função (redução de custos)</label></li>
+<li><label><input type="checkbox" checked=""><strong>Manejo de UCs</strong> - Diagnóstico e monitoramento funcional</label></li>
+<li><label><input type="checkbox" checked=""><strong>SAF e Silvicultura</strong> - Desenho de sistemas produtivos</label></li>
+<li><label><input type="checkbox" checked=""><strong>Licenciamento ambiental</strong> - Avaliação de impactos funcionais em EIA/RIMA</label></li>
+<li><label><input type="checkbox" checked=""><strong>Manejo de PFNM</strong> - Conservação de processos ecológicos (dispersão, polinização)</label></li>
+</ul>
+<p><strong>Mercado:</strong> 12 milhões de ha a restaurar até 2030 (NDC Brasil - Acordo de Paris, 2016)</p>
+</section>
+<section id="história-das-redes-ecológicas" class="slide level2">
+<h2>História das Redes Ecológicas</h2>
+<p><strong>Anos 1920-1950: Primeiras Observações</strong> - Teias alimentares e cadeias tróficas - Primeiras redes de polinização documentadas</p>
+<p><strong>Anos 1970-1980: Formalização Matemática</strong> - Modelos de estabilidade de redes - Análise estrutural de teias alimentares</p>
+</section>
+<section id="história-das-redes-ecológicas-1" class="slide level2">
+<h2>História das Redes Ecológicas</h2>
+<p><strong>Anos 1990-2000: Era Digital</strong> - Descoberta de padrões de aninhamento - Métricas de especialização em redes</p>
+<p><strong>Anos 2010-presente: Big Data</strong> - Análises globais de redes - Impactos das mudanças climáticas - Dinâmica temporal de interações</p>
+</section>
+<section id="o-que-são-redes-ecológicas" class="slide level2">
+<h2>O que são Redes Ecológicas?</h2>
+<p><strong>Definição:</strong></p>
+<blockquote>
+<p>“Representação gráfica de quem interage com quem em uma comunidade ecológica”</p>
+</blockquote>
+<p><strong>Componentes:</strong></p>
+<ul>
+<li><strong>Nós (vértices):</strong> Espécies</li>
+<li><strong>Ligações (arestas):</strong> Interações</li>
+<li><strong>Pesos:</strong> Intensidade/frequência</li>
+</ul>
+</section>
+<section id="o-que-são-redes-ecológicas-1" class="slide level2">
+<h2>O que são Redes Ecológicas?</h2>
+<p><strong>Tipos principais:</strong></p>
+<ol type="1">
+<li><p><strong>Unipartidas:</strong> 🐒 ↔︎ 🐒 ↔︎ 🐒 (mesmo tipo de organismo)</p></li>
+<li><p><strong>Bipartidas:</strong> 🌺 ↔︎ 🐝 (dois tipos diferentes) 🎯</p></li>
+<li><p><strong>Multipartidas:</strong> 🌱 ↔︎ 🐛 ↔︎ 🐦 (três ou mais níveis)</p></li>
+</ol>
+<p><strong>Essa aula: Foco em BIPARTIDAS!</strong></p>
+</section>
+<section id="tipos-de-redes-bipartidas" class="slide level2">
+<h2>Tipos de Redes Bipartidas</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Mutualísticas (+/+)</strong></p>
+<ul>
+<li>Polinização</li>
+<li>Dispersão de sementes</li>
+<li>Formiga-planta</li>
+<li>Micorrizas</li>
+</ul>
+<p><em>Ambas espécies se beneficiam</em></p>
+</div><div class="column" style="width:50%;">
+<p><strong>Antagonísticas (+/-)</strong></p>
+<ul>
+<li>Herbivoria</li>
+<li>Parasitismo</li>
+<li>Patógenos</li>
+</ul>
+<p><em>Uma se beneficia, outra prejudicada</em></p>
+</div></div>
+<p><strong>Nossa aula:</strong> Foco em <strong>FRUGIVORIA</strong> (mutualismo)</p>
+<p>Animais comem frutos → dispersam sementes → regeneração florestal</p>
+</section>
+<section id="por-que-frugivoria" class="slide level2">
+<h2>Por que Frugivoria?</h2>
+<p><strong>Importância Ecológica:</strong></p>
+<ul>
+<li><strong>Maioria das árvores tropicais</strong> dependem de animais</li>
+<li>Determina composição florestal futura</li>
+<li>Conecta fragmentos florestais (corredores)</li>
+<li>Mantém diversidade genética</li>
+</ul>
+</section>
+<section id="por-que-frugivoria-1" class="slide level2">
+<h2>Por que Frugivoria?</h2>
+<p><strong>Importância Econômica:</strong></p>
+<ul>
+<li>Regeneração de áreas degradadas</li>
+<li>Produção de frutos nativos</li>
+<li>Ecoturismo (observação de aves)</li>
+</ul>
+<p><strong>Ameaças:</strong></p>
+<ul>
+<li>Perda de frugívoros grandes (defaunação)</li>
+<li>Fragmentação de habitats</li>
+<li>Mudanças climáticas</li>
+</ul>
+</section>
+<section id="contexto-floresta-com-araucária" class="slide level2">
+<h2>Contexto: Floresta com Araucária</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Floresta Ombrófila Mista</strong></p>
+<ul>
+<li>Maior extensão, Sul do Brasil (PR, SC, RS)</li>
+<li>Altitude: 500-1.400m</li>
+<li>Temperatura: 15-18°C</li>
+<li><strong>&lt;10% da área original</strong></li>
+</ul>
+<p><strong>Espécie emblemática:</strong></p>
+<p><em>Araucaria angustifolia</em></p>
+</div><div class="column" style="width:50%;">
+<p><strong>Frugívoros importantes:</strong></p>
+<ul>
+<li>Gralha-azul (<em>Cyanocorax caeruleus</em>)</li>
+<li>Tucanos e papagaios</li>
+<li>Macacos (bugio, macaco-prego)</li>
+<li>Morcegos</li>
+</ul>
+<p><strong>Ameaças:</strong></p>
+<ul>
+<li>Fragmentação extrema</li>
+<li>Perda de fauna</li>
+<li>Necessidade urgente de restauração</li>
+</ul>
+</div></div>
+</section>
+<section id="exercício-para-hoje" class="slide level2">
+<h2>Exercício para hoje</h2>
+<p><strong>Pergunta Científica:</strong></p>
+<blockquote>
+<p>“Como está estruturada a rede de frugivoria em um fragmento de Floresta com Araucária? Existem espécies-chave para a regeneração florestal?”</p>
+</blockquote>
+<p><strong>Dados simulados para fins didáticos:</strong></p>
+<ul>
+<li>24 espécies de aves</li>
+<li>13 espécies de mamíferos</li>
+<li>33 espécies de árvores</li>
+</ul>
+</section></section>
+<section>
+<section id="parte-2-conceitos-fundamentais" class="title-slide slide level1 center" data-background-color="#2C5F2D">
+<h1>Parte 2: Conceitos Fundamentais</h1>
+
+</section>
+<section id="anatomia-de-uma-rede-bipartida" class="slide level2">
+<h2>Anatomia de uma Rede Bipartida</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-1-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><strong>Elementos:</strong> Aves (topo) | Árvores (base) | Linhas = interações</p>
+</section>
+<section id="representações-de-redes" class="slide level2">
+<h2>Representações de Redes</h2>
+<p><strong>Três formas de visualizar a mesma rede:</strong></p>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><strong>1. Matriz</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Frequência de visitas</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Araucaria</th>
+<th style="text-align: right;">Ocotea</th>
+<th style="text-align: right;">P. myrtifolia</th>
+<th style="text-align: right;">Ilex</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Gralha-azul</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sabiá</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sanhaço</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Papagaio</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">15</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div class="column" style="width:33%;">
+<p><strong>2. Grafo Bipartido</strong></p>
+<p>(vimos no slide anterior)</p>
+<ul>
+<li>Visualização ecológica</li>
+<li>Fácil interpretação</li>
+<li>Boa para apresentações</li>
+</ul>
+</div><div class="column" style="width:33%;">
+<p><strong>3. Lista de Arestas</strong></p>
+<pre><code>Gralha-azul - Araucaria: 25
+Gralha-azul - Ocotea: 4
+Gralha-azul - P. myrtifolia: 6
+Gralha-azul - Ilex: 10
+...</code></pre>
+<ul>
+<li>Formato de banco de dados</li>
+</ul>
+</div></div>
+</section>
+<section id="tipos-de-espécies-na-rede-generalistas" class="slide level2">
+<h2>Tipos de Espécies na Rede: Generalistas 🌟</h2>
+<p>Interagem com <strong>muitas</strong> espécies | Dieta ampla e flexível | Ex: Sabiá-laranjeira</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Características:</strong></p>
+<ul>
+<li><strong>Alto grau (degree):</strong> Visitam muitas plantas diferentes</li>
+<li><strong>Alta força (strength):</strong> Somando todas interações, são muito ativos</li>
+<li><strong>Baixa especialização:</strong> Não dependem de uma única planta</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Papel ecológico:</strong></p>
+<ul>
+<li><strong>Conectividade da rede:</strong> Ligam diferentes módulos, integrando a comunidade</li>
+<li><strong>Redundância funcional:</strong> Múltiplos dispersores por planta - “backup” ecológico</li>
+<li><strong>Resiliência do sistema:</strong> Mantêm dispersão mesmo com perda de outras espécies</li>
+</ul>
+</div></div>
+</section>
+<section id="tipos-de-espécies-na-rede-especialistas" class="slide level2">
+<h2>Tipos de Espécies na Rede: Especialistas 🎯</h2>
+<p>Interagem com <strong>poucas</strong> espécies | Dieta restrita | Ex: Gralha-azul e pinhão</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Características:</strong></p>
+<ul>
+<li><strong>Baixo grau (degree):</strong> Visitam poucas espécies</li>
+<li><strong>Força variável (strength):</strong> Podem fazer muitas visitas, mas só em uma planta</li>
+<li><strong>Alta especialização:</strong> Relação forte e exclusiva</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Papel ecológico:</strong></p>
+<ul>
+<li><strong>Vulneráveis à extinção:</strong> Se a planta desaparece, a ave também</li>
+<li><strong>Coevolução forte:</strong> Adaptações mútuas (bico ↔︎ pinhão)</li>
+<li><strong>Indicadores de qualidade:</strong> Presença indica ecossistema preservado</li>
+</ul>
+</div></div>
+</section>
+<section id="propriedades-emergentes-em-uma-rede" class="slide level2">
+<h2>Propriedades Emergentes em uma Rede</h2>
+<p><strong>Propriedades que surgem da rede como um todo:</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 30%">
+<col style="width: 23%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Propriedade</th>
+<th>Pergunta Ecológica</th>
+<th>Métrica (R)</th>
+<th>Interpretação</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Conectância</strong></td>
+<td>Quão conectada é a rede?</td>
+<td><code>connectance</code></td>
+<td>0-1: proporção de interações possíveis que ocorrem</td>
+</tr>
+<tr class="even">
+<td><strong>Aninhamento</strong></td>
+<td>Especialistas visitam as mesmas plantas que generalistas?</td>
+<td><code>weighted NODF</code></td>
+<td>0-100: quanto maior, mais aninhada</td>
+</tr>
+<tr class="odd">
+<td><strong>Modularidade</strong></td>
+<td>Existem sub-comunidades especializadas?</td>
+<td><code>modularity</code></td>
+<td>&gt;0.4: módulos bem definidos</td>
+</tr>
+<tr class="even">
+<td><strong>Especialização</strong></td>
+<td>Quão seletivas são as interações?</td>
+<td><code>H2</code></td>
+<td>0-1: (0=generalista, 1=especialista)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemplo de como calcular:</strong> <code>networklevel(matriz, index = "connectance")</code></p>
+</section>
+<section id="conceito-chave-aninhamento" class="slide level2">
+<h2>Conceito-Chave: Aninhamento</h2>
+<p><strong>O que é?</strong></p>
+<p>Padrão onde as interações dos especialistas são <strong>subconjuntos</strong> das interações dos generalistas.</p>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"><p><strong>Especialista A6</strong> interage apenas com <strong>P1</strong> | <strong>Generalista A1</strong> interage com <strong>todas</strong></p>
+</section>
+<section id="por-que-aninhamento-importa" class="slide level2">
+<h2>Por que Aninhamento Importa?</h2>
+<p><strong>Rede ANINHADA</strong> ✅</p>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="768"><p><strong>Características:</strong></p>
+<ul>
+<li><strong>Perda de especialista = baixo impacto:</strong> Outras espécies compensam</li>
+<li><strong>Generalistas sustentam rede:</strong> Mantêm conectividade mesmo com extinções</li>
+<li><strong>Maior resiliência:</strong> Rede tolera perturbações</li>
+</ul>
+</section>
+<section id="por-que-aninhamento-importa-1" class="slide level2">
+<h2>Por que Aninhamento Importa?</h2>
+<p><strong>Rede MODULAR</strong> ⚠️</p>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="768"><p><strong>Características:</strong></p>
+<ul>
+<li><strong>Extinção em cascata:</strong> Perda de uma espécie afeta todo o módulo</li>
+<li><strong>Módulos isolados:</strong> Pouca redundância funcional</li>
+<li><strong>Menor resiliência:</strong> Rede vulnerável a perturbações</li>
+</ul>
+</section>
+<section id="conceito-chave-especialização-h2" class="slide level2">
+<h2>Conceito-Chave: Especialização (H2)</h2>
+<p><strong>O que é?</strong> Índice que mede o <strong>grau de seletividade</strong> nas interações da rede.</p>
+<p><span class="math display">\[H2 = \frac{H2'}{H2'_{max}}\]</span></p>
+<p><strong>Interpretação prática:</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Valor</th>
+<th>Significado</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>H2 ≈ 0</strong></td>
+<td>Generalismo total</td>
+<td>Interações ao acaso</td>
+</tr>
+<tr class="even">
+<td><strong>H2 = 0.3-0.6</strong></td>
+<td>Especialização moderada</td>
+<td>Típico em frugivoria</td>
+</tr>
+<tr class="odd">
+<td><strong>H2 ≈ 1</strong></td>
+<td>Especialização perfeita</td>
+<td>Relações exclusivas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Base:</strong> Entropia de Shannon</p>
+</section>
+<section id="visualizando-especialização" class="slide level2">
+<h2>Visualizando Especialização</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"></section>
+<section id="conceitos-em-nível-de-espécie" class="slide level2">
+<h2>Conceitos em Nível de Espécie</h2>
+<p><strong>Métricas para avaliar o papel de cada espécie na rede:</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 24%">
+<col style="width: 23%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Métrica</th>
+<th>O que mede?</th>
+<th>Nome no R</th>
+<th>Interpretação</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Grau</strong></td>
+<td>Quantos parceiros?</td>
+<td><code>degree</code></td>
+<td>Número de espécies com que interage</td>
+</tr>
+<tr class="even">
+<td><strong>Força</strong></td>
+<td>Quão ativa?</td>
+<td><code>species strength</code></td>
+<td>Soma total de interações</td>
+</tr>
+<tr class="odd">
+<td><strong>PDI</strong></td>
+<td>Quão seletiva?</td>
+<td><code>PDI</code></td>
+<td>0=generalista, 1=especialista</td>
+</tr>
+<tr class="even">
+<td><strong>Centralidade</strong></td>
+<td>Quão importante estruturalmente?</td>
+<td><code>betweenness</code></td>
+<td>Papel como “ponte” na rede</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Como calcular:</strong> <code>specieslevel(matriz, index = "degree")</code></p>
+<p><strong>Exemplo prático:</strong> Sabiá tem alto grau (visita várias plantas) + alta força (muitas visitas) = espécie-chave por causa da por CONECTIVIDADE!</p>
+</section>
+<section id="conceito-chave-centralidade" class="slide level2">
+<h2>Conceito-Chave: Centralidade</h2>
+<p><strong>Centralidade</strong> = importância como <strong>“ponte”</strong> entre diferentes partes da rede</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>ALTA centralidade</strong> 🌉</p>
+<ul>
+<li>Liga grupos diferentes</li>
+<li>Caminho obrigatório</li>
+<li><strong>Perda → rede fragmenta</strong></li>
+</ul>
+<p><strong>Ex:</strong> Ave ligando Lauraceae (dossel) ↔︎ Myrtaceae (sub-bosque)</p>
+</div><div class="column" style="width:50%;">
+<p><strong>BAIXA centralidade</strong> 🔗</p>
+<ul>
+<li>Redundante</li>
+<li>Não é ponte essencial</li>
+<li><strong>Perda → outras compensam</strong></li>
+</ul>
+<p><strong>Ex:</strong> Sabiá visitando Myrtaceae com outras 5 espécies</p>
+</div></div>
+<p><strong>Conservação:</strong> Priorizar espécies centrais!</p>
+</section>
+<section id="o-que-circula-via-centralidade" class="slide level2">
+<h2>O que “Circula” via Centralidade?</h2>
+<p><strong>Espécies centrais facilitam fluxos ecológicos:</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 45%">
+<col style="width: 54%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo de Fluxo</th>
+<th>Exemplo em Lages</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Subsídio energético</strong></td>
+<td><em>Sp. 1</em> (inverno) + <em>Sp. 2</em> (primavera) + <em>Sp. 3</em> (verão) → recursos complementares mantêm Sabiá ativo ano todo</td>
+</tr>
+<tr class="even">
+<td><strong>Populações viáveis</strong></td>
+<td>Fenologia complementar de Aquifoliaceae + Lauraceae + Myrtaceae sustenta população de dispersores generalistas</td>
+</tr>
+<tr class="odd">
+<td><strong>Cascatas</strong></td>
+<td>Defaunação de generalistas → falha regeneração simultânea de múltiplas famílias (Lauraceae, Myrtaceae, Rosaceae)</td>
+</tr>
+<tr class="even">
+<td><strong>Propágulos</strong></td>
+<td>Gralha-azul move pinhão entre capões distantes</td>
+</tr>
+<tr class="odd">
+<td><strong>Resiliência</strong></td>
+<td>Falha reprodutiva de algumas espécies compensada por outras</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Centralidade = integração funcional da floresta!</strong></p>
+</section>
+<section id="espécies-chave-para-conservação" class="slide level2">
+<h2>Espécies-Chave para Conservação</h2>
+<p><strong>Como identificar espécies prioritárias?</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 21%">
+<col style="width: 18%">
+<col style="width: 21%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th>Características</th>
+<th>Métricas</th>
+<th>Papel Ecológico</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Generalistas Ativos</strong></td>
+<td>Muitos parceiros + muitas interações</td>
+<td>Alto grau + alta força</td>
+<td>Mantêm rede conectada</td>
+<td>Sabiá-laranjeira</td>
+</tr>
+<tr class="even">
+<td><strong>Especialistas Fortes</strong></td>
+<td>Poucos parceiros + interações intensas</td>
+<td>Baixo grau + alta força</td>
+<td>Vulneráveis mas únicos</td>
+<td>Gralha-azul ↔︎ Araucaria</td>
+</tr>
+<tr class="odd">
+<td><strong>Conectores</strong></td>
+<td>Ligam diferentes módulos</td>
+<td>Alta centralidade (betweenness)</td>
+<td>Integram sub-redes</td>
+<td>Ave ligando dossel-solo</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Estratégia:</strong> Priorizar todos os 3 tipos - cada um tem função única!</p>
+</section>
+<section id="resumo-dos-conceitos" class="slide level2">
+<h2>Resumo dos Conceitos 📝</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Conceito</th>
+<th>Nível</th>
+<th>O que mede</th>
+<th>Valores</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Conectância</strong></td>
+<td>Rede</td>
+<td>Densidade de conexões</td>
+<td>0-1</td>
+</tr>
+<tr class="even">
+<td><strong>H2</strong></td>
+<td>Rede</td>
+<td>Especialização geral</td>
+<td>0-1</td>
+</tr>
+<tr class="odd">
+<td><strong>Nestedness</strong></td>
+<td>Rede</td>
+<td>Padrão de subconjuntos</td>
+<td>0-100</td>
+</tr>
+<tr class="even">
+<td><strong>Grau</strong></td>
+<td>Espécie</td>
+<td>Número de parceiros</td>
+<td>1-N</td>
+</tr>
+<tr class="odd">
+<td><strong>PDI</strong></td>
+<td>Espécie</td>
+<td>Especialização individual</td>
+<td>0-1</td>
+</tr>
+<tr class="even">
+<td><strong>Força</strong></td>
+<td>Espécie</td>
+<td>Total de interações</td>
+<td>&gt;0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Próximo:</strong> Vamos criar nossos dados e calcular tudo isso! 💪</p>
+</section></section>
+<section>
+<section id="parte-3-criando-dados-didáticos" class="title-slide slide level1 center" data-background-color="#2C5F2D">
+<h1>Parte 3: Criando Dados Didáticos</h1>
+<p><strong>Duração: 20 minutos</strong></p>
+</section>
+<section id="nosso-dataset-didático-floresta-com-araucária" class="slide level2">
+<h2>Nosso Dataset Didático: Floresta com Araucária</h2>
+<p><strong>Vamos simular uma rede de frugivoria!</strong></p>
+<p><strong>Cenário:</strong></p>
+<ul>
+<li>Fragmento florestal em Lages-SC</li>
+<li>Altitude: 920m</li>
+<li>Método: observação focal de árvores frutificando</li>
+</ul>
+<p><strong>Comunidade:</strong></p>
+<ul>
+<li><strong>37 espécies de frugívoros</strong> (24 aves + 13 mamíferos)</li>
+<li><strong>33 espécies de árvores</strong> produtoras de frutos</li>
+<li>Dados de frequência de visitação</li>
+</ul>
+</section>
+<section id="passo-1-criar-lista-de-espécies" class="slide level2">
+<h2>Passo 1: Criar Lista de Espécies</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb2-2"><a href=""></a><span class="co"># CRIAR COMUNIDADE DE FRUGÍVOROS</span></span>
+<span id="cb2-3"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb2-4"><a href=""></a></span>
+<span id="cb2-5"><a href=""></a><span class="co"># AVES (24 espécies)</span></span>
+<span id="cb2-6"><a href=""></a>aves <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-7"><a href=""></a>  <span class="co"># Grandes frugívoros</span></span>
+<span id="cb2-8"><a href=""></a>  <span class="st">"Ramphastos dicolorus"</span>,      <span class="co"># Tucano-de-bico-verde</span></span>
+<span id="cb2-9"><a href=""></a>  <span class="st">"Amazona vinacea"</span>,           <span class="co"># Papagaio-de-peito-roxo</span></span>
+<span id="cb2-10"><a href=""></a>  <span class="st">"Amazona pretrei"</span>,           <span class="co"># Papagaio-charão</span></span>
+<span id="cb2-11"><a href=""></a>  <span class="st">"Cyanocorax caeruleus"</span>,      <span class="co"># Gralha-azul</span></span>
+<span id="cb2-12"><a href=""></a>  </span>
+<span id="cb2-13"><a href=""></a>  <span class="co"># Médios frugívoros</span></span>
+<span id="cb2-14"><a href=""></a>  <span class="st">"Turdus rufiventris"</span>,        <span class="co"># Sabiá-laranjeira</span></span>
+<span id="cb2-15"><a href=""></a>  <span class="st">"Turdus albicollis"</span>,         <span class="co"># Sabiá-coleira</span></span>
+<span id="cb2-16"><a href=""></a>  <span class="st">"Turdus amaurochalinus"</span>,     <span class="co"># Sabiá-poca</span></span>
+<span id="cb2-17"><a href=""></a>  <span class="st">"Euphonia chlorotica"</span>,       <span class="co"># Fim-fim</span></span>
+<span id="cb2-18"><a href=""></a>  <span class="st">"Euphonia cyanocephala"</span>,     <span class="co"># Gaturamo-rei</span></span>
+<span id="cb2-19"><a href=""></a>  <span class="st">"Tangara sayaca"</span>,            <span class="co"># Sanhaço-cinzento</span></span>
+<span id="cb2-20"><a href=""></a>  <span class="st">"Pipraeidea melanonota"</span>,     <span class="co"># Saíra-viúva</span></span>
+<span id="cb2-21"><a href=""></a>  <span class="st">"Dacnis cayana"</span>,             <span class="co"># Saí-azul</span></span>
+<span id="cb2-22"><a href=""></a>  </span>
+<span id="cb2-23"><a href=""></a>  <span class="co"># Pequenos frugívoros</span></span>
+<span id="cb2-24"><a href=""></a>  <span class="st">"Elaenia flavogaster"</span>,       <span class="co"># Guaracava</span></span>
+<span id="cb2-25"><a href=""></a>  <span class="st">"Myiodynastes maculatus"</span>,    <span class="co"># Bem-te-vi-rajado</span></span>
+<span id="cb2-26"><a href=""></a>  <span class="st">"Pitangus sulphuratus"</span>,      <span class="co"># Bem-te-vi</span></span>
+<span id="cb2-27"><a href=""></a>  <span class="st">"Tyrannus melancholicus"</span>,    <span class="co"># Suiriri</span></span>
+<span id="cb2-28"><a href=""></a>  </span>
+<span id="cb2-29"><a href=""></a>  <span class="co"># Beija-flores (especialistas)</span></span>
+<span id="cb2-30"><a href=""></a>  <span class="st">"Thalurania glaucopis"</span>,      <span class="co"># Beija-flor-de-fronte-violeta</span></span>
+<span id="cb2-31"><a href=""></a>  <span class="st">"Leucochloris albicollis"</span>,   <span class="co"># Beija-flor-de-papo-branco</span></span>
+<span id="cb2-32"><a href=""></a>  <span class="st">"Stephanoxis lalandi"</span>,       <span class="co"># Beija-flor-de-topete</span></span>
+<span id="cb2-33"><a href=""></a>  </span>
+<span id="cb2-34"><a href=""></a>  <span class="co"># Outros</span></span>
+<span id="cb2-35"><a href=""></a>  <span class="st">"Pyroderus scutatus"</span>,        <span class="co"># Pavó</span></span>
+<span id="cb2-36"><a href=""></a>  <span class="st">"Procnias nudicollis"</span>,       <span class="co"># Araponga</span></span>
+<span id="cb2-37"><a href=""></a>  <span class="st">"Selenidera maculirostris"</span>,  <span class="co"># Araçari-poca</span></span>
+<span id="cb2-38"><a href=""></a>  <span class="st">"Penelope obscura"</span>,          <span class="co"># Jacuaçu</span></span>
+<span id="cb2-39"><a href=""></a>  <span class="st">"Columba livia"</span>              <span class="co"># Pomba-doméstica</span></span>
+<span id="cb2-40"><a href=""></a>)</span>
+<span id="cb2-41"><a href=""></a></span>
+<span id="cb2-42"><a href=""></a><span class="co"># MAMÍFEROS (13 espécies)</span></span>
+<span id="cb2-43"><a href=""></a>mamiferos <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-44"><a href=""></a>  <span class="co"># Primatas</span></span>
+<span id="cb2-45"><a href=""></a>  <span class="st">"Alouatta guariba"</span>,          <span class="co"># Bugio-ruivo</span></span>
+<span id="cb2-46"><a href=""></a>  <span class="st">"Sapajus nigritus"</span>,          <span class="co"># Macaco-prego</span></span>
+<span id="cb2-47"><a href=""></a>  </span>
+<span id="cb2-48"><a href=""></a>  <span class="co"># Morcegos frugívoros</span></span>
+<span id="cb2-49"><a href=""></a>  <span class="st">"Artibeus lituratus"</span>,        <span class="co"># Morcego-grande-de-listra</span></span>
+<span id="cb2-50"><a href=""></a>  <span class="st">"Artibeus fimbriatus"</span>,       <span class="co"># Morcego-das-frutas-grande</span></span>
+<span id="cb2-51"><a href=""></a>  <span class="st">"Sturnira lilium"</span>,           <span class="co"># Morcego-de-ombros-amarelos</span></span>
+<span id="cb2-52"><a href=""></a>  <span class="st">"Carollia perspicillata"</span>,    <span class="co"># Morcego-cauda-curta</span></span>
+<span id="cb2-53"><a href=""></a>  <span class="st">"Platyrrhinus lineatus"</span>,     <span class="co"># Morcego-de-listra-branca</span></span>
+<span id="cb2-54"><a href=""></a>  </span>
+<span id="cb2-55"><a href=""></a>  <span class="co"># Roedores</span></span>
+<span id="cb2-56"><a href=""></a>  <span class="st">"Dasyprocta azarae"</span>,         <span class="co"># Cutia</span></span>
+<span id="cb2-57"><a href=""></a></span>
+<span id="cb2-58"><a href=""></a>  <span class="co"># Marsupiais</span></span>
+<span id="cb2-59"><a href=""></a>  <span class="st">"Didelphis albiventris"</span>,     <span class="co"># Gambá-de-orelha-branca</span></span>
+<span id="cb2-60"><a href=""></a>  </span>
+<span id="cb2-61"><a href=""></a>  <span class="co"># Carnívoros</span></span>
+<span id="cb2-62"><a href=""></a>  <span class="st">"Nasua nasua"</span>,               <span class="co"># Quati</span></span>
+<span id="cb2-63"><a href=""></a>  <span class="st">"Procyon cancrivorus"</span>,       <span class="co"># Mão-pelada</span></span>
+<span id="cb2-64"><a href=""></a>  <span class="st">"Eira barbara"</span>,              <span class="co"># Irara</span></span>
+<span id="cb2-65"><a href=""></a>  <span class="st">"Leopardus wiedii"</span>           <span class="co"># Gato-maracajá</span></span>
+<span id="cb2-66"><a href=""></a>)</span>
+<span id="cb2-67"><a href=""></a></span>
+<span id="cb2-68"><a href=""></a><span class="co"># Juntar todos</span></span>
+<span id="cb2-69"><a href=""></a>frugivoros <span class="ot">&lt;-</span> <span class="fu">c</span>(aves, mamiferos)</span>
+<span id="cb2-70"><a href=""></a></span>
+<span id="cb2-71"><a href=""></a><span class="fu">cat</span>(<span class="st">"Total de frugívoros:"</span>, <span class="fu">length</span>(frugivoros), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total de frugívoros: 37 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"- Aves:"</span>, <span class="fu">length</span>(aves), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>- Aves: 24 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"- Mamíferos:"</span>, <span class="fu">length</span>(mamiferos), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>- Mamíferos: 13 </code></pre>
+</div>
+</div>
+</section>
+<section id="passo-2-criar-lista-de-árvores" class="slide level2">
+<h2>Passo 2: Criar Lista de Árvores</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb8-2"><a href=""></a><span class="co"># CRIAR COMUNIDADE DE ÁRVORES</span></span>
+<span id="cb8-3"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb8-4"><a href=""></a></span>
+<span id="cb8-5"><a href=""></a>arvores <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb8-6"><a href=""></a>  <span class="co"># Myrtaceae (frutos carnosos, muito visitados)</span></span>
+<span id="cb8-7"><a href=""></a>  <span class="st">"Eugenia uniflora"</span>,          <span class="co"># Pitangueira</span></span>
+<span id="cb8-8"><a href=""></a>  <span class="st">"Eugenia pyriformis"</span>,        <span class="co"># Uvaia</span></span>
+<span id="cb8-9"><a href=""></a>  <span class="st">"Campomanesia xanthocarpa"</span>,  <span class="co"># Guabiroba</span></span>
+<span id="cb8-10"><a href=""></a>  <span class="st">"Myrcia splendens"</span>,          <span class="co"># Cambuí-vermelho</span></span>
+<span id="cb8-11"><a href=""></a>  <span class="st">"Myrcianthes pungens"</span>,       <span class="co"># Guabiju</span></span>
+<span id="cb8-12"><a href=""></a>  <span class="st">"Myrcia palustris"</span>,          <span class="co"># Cambuí</span></span>
+<span id="cb8-13"><a href=""></a>  </span>
+<span id="cb8-14"><a href=""></a>  <span class="co"># Lauraceae (frutos importantes para aves grandes)</span></span>
+<span id="cb8-15"><a href=""></a>  <span class="st">"Ocotea pulchella"</span>,          <span class="co"># Canela-lageana</span></span>
+<span id="cb8-16"><a href=""></a>  <span class="st">"Nectandra megapotamica"</span>,    <span class="co"># Canela-imbuia</span></span>
+<span id="cb8-17"><a href=""></a>  <span class="st">"Ocotea puberula"</span>,           <span class="co"># Canela-guaicá</span></span>
+<span id="cb8-18"><a href=""></a>  </span>
+<span id="cb8-19"><a href=""></a>  <span class="co"># Araucariaceae (pinhão - recurso sazonal importante)</span></span>
+<span id="cb8-20"><a href=""></a>  <span class="st">"Araucaria angustifolia"</span>,    <span class="co"># Araucária</span></span>
+<span id="cb8-21"><a href=""></a>  </span>
+<span id="cb8-22"><a href=""></a>  <span class="co"># Aquifoliaceae</span></span>
+<span id="cb8-23"><a href=""></a>  <span class="st">"Ilex paraguariensis"</span>,       <span class="co"># Erva-mate</span></span>
+<span id="cb8-24"><a href=""></a>  <span class="st">"Ilex microdonta"</span>,           <span class="co"># Caúna-miúda</span></span>
+<span id="cb8-25"><a href=""></a>  <span class="st">"Ilex theezans"</span>,             <span class="co"># Caúna</span></span>
+<span id="cb8-26"><a href=""></a>  </span>
+<span id="cb8-27"><a href=""></a>  <span class="co"># Rosaceae</span></span>
+<span id="cb8-28"><a href=""></a>  <span class="st">"Prunus myrtifolia"</span>,         <span class="co"># Pessegueiro-bravo</span></span>
+<span id="cb8-29"><a href=""></a>  </span>
+<span id="cb8-30"><a href=""></a>  <span class="co"># Sapindaceae</span></span>
+<span id="cb8-31"><a href=""></a>  <span class="st">"Cupania vernalis"</span>,          <span class="co"># Camboatá</span></span>
+<span id="cb8-32"><a href=""></a>  <span class="st">"Allophylus edulis"</span>,         <span class="co"># Chal-chal</span></span>
+<span id="cb8-33"><a href=""></a>  </span>
+<span id="cb8-34"><a href=""></a>  <span class="co"># Solanaceae (pioneiras, muito produtivas)</span></span>
+<span id="cb8-35"><a href=""></a>  <span class="st">"Solanum pseudoquina"</span>,       <span class="co"># Joá</span></span>
+<span id="cb8-36"><a href=""></a>  <span class="st">"Solanum sanctaecatharinae"</span>, <span class="co"># Joá-manso</span></span>
+<span id="cb8-37"><a href=""></a>  <span class="st">"Solanum variabile"</span>,         <span class="co"># Joá-de-árvore</span></span>
+<span id="cb8-38"><a href=""></a>  </span>
+<span id="cb8-39"><a href=""></a>  <span class="co"># Salicaceae</span></span>
+<span id="cb8-40"><a href=""></a>  <span class="st">"Casearia decandra"</span>,         <span class="co"># Guaçatunga</span></span>
+<span id="cb8-41"><a href=""></a>  <span class="st">"Xylosma ciliatifolia"</span>,      <span class="co"># Sucará</span></span>
+<span id="cb8-42"><a href=""></a>  </span>
+<span id="cb8-43"><a href=""></a>  <span class="co"># Celastraceae</span></span>
+<span id="cb8-44"><a href=""></a>  <span class="st">"Maytenus ilicifolia"</span>,       <span class="co"># Espinheira-santa</span></span>
+<span id="cb8-45"><a href=""></a>  <span class="st">"Schaefferia argentinensis"</span>, <span class="co"># Sombreiro</span></span>
+<span id="cb8-46"><a href=""></a>  </span>
+<span id="cb8-47"><a href=""></a>  <span class="co"># Outras famílias importantes</span></span>
+<span id="cb8-48"><a href=""></a>  <span class="st">"Schinus terebinthifolia"</span>,   <span class="co"># Aroeira-vermelha (Anacardiaceae)</span></span>
+<span id="cb8-49"><a href=""></a>  <span class="st">"Lithraea brasiliensis"</span>,     <span class="co"># bugreiro (Anacardiaceae)</span></span>
+<span id="cb8-50"><a href=""></a>  <span class="st">"Zanthoxylum rhoifolium"</span>,    <span class="co"># Mamica-de-cadela (Rutaceae)</span></span>
+<span id="cb8-51"><a href=""></a>  <span class="st">"Myrsine coriacea"</span>,          <span class="co"># Capororoca (Primulaceae)</span></span>
+<span id="cb8-52"><a href=""></a>  <span class="st">"Myrsine umbellata"</span>,         <span class="co"># Capororoquinha (Primulaceae)</span></span>
+<span id="cb8-53"><a href=""></a>  <span class="st">"Drimys brasiliensis"</span>,       <span class="co"># Casca-d'anta (Winteraceae)</span></span>
+<span id="cb8-54"><a href=""></a>  <span class="st">"Roupala montana"</span>,      <span class="co"># Carvalho-brasileiro (Proteaceae)</span></span>
+<span id="cb8-55"><a href=""></a>  <span class="st">"Sebastiania commersoniana"</span>, <span class="co"># Branquilho (Euphorbiaceae)</span></span>
+<span id="cb8-56"><a href=""></a>  <span class="st">"Matayba elaeagnoides"</span>,      <span class="co"># Camboatá-branco (Sapindaceae)</span></span>
+<span id="cb8-57"><a href=""></a>  <span class="st">"Styrax leprosus"</span>            <span class="co"># Carne-de-vaca (Styracaceae)</span></span>
+<span id="cb8-58"><a href=""></a>)</span>
+<span id="cb8-59"><a href=""></a></span>
+<span id="cb8-60"><a href=""></a><span class="fu">cat</span>(<span class="st">"Total de árvores:"</span>, <span class="fu">length</span>(arvores), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total de árvores: 33 </code></pre>
+</div>
+</div>
+</section>
+<section id="passo-3-criar-matriz-de-interações" class="slide level2">
+<h2>Passo 3: Criar Matriz de Interações</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb10-2"><a href=""></a><span class="co"># CRIAR MATRIZ DE INTERAÇÕES REALISTA</span></span>
+<span id="cb10-3"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb10-4"><a href=""></a></span>
+<span id="cb10-5"><a href=""></a><span class="co"># Dimensões</span></span>
+<span id="cb10-6"><a href=""></a>n_frug <span class="ot">&lt;-</span> <span class="fu">length</span>(frugivoros)</span>
+<span id="cb10-7"><a href=""></a>n_arv <span class="ot">&lt;-</span> <span class="fu">length</span>(arvores)</span>
+<span id="cb10-8"><a href=""></a></span>
+<span id="cb10-9"><a href=""></a><span class="co"># Criar matriz vazia</span></span>
+<span id="cb10-10"><a href=""></a>matriz_frugivoria <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>,</span>
+<span id="cb10-11"><a href=""></a>                            <span class="at">nrow =</span> n_frug,</span>
+<span id="cb10-12"><a href=""></a>                            <span class="at">ncol =</span> n_arv,</span>
+<span id="cb10-13"><a href=""></a>                            <span class="at">dimnames =</span> <span class="fu">list</span>(frugivoros, arvores))</span>
+<span id="cb10-14"><a href=""></a></span>
+<span id="cb10-15"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb10-16"><a href=""></a><span class="co"># ESTRATÉGIA DE PREENCHIMENTO REALISTA</span></span>
+<span id="cb10-17"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb10-18"><a href=""></a></span>
+<span id="cb10-19"><a href=""></a><span class="co"># 1. GENERALISTAS (10% das espécies) - muitas interações</span></span>
+<span id="cb10-20"><a href=""></a>n_generalistas <span class="ot">&lt;-</span> <span class="fu">round</span>(n_frug <span class="sc">*</span> <span class="fl">0.10</span>)</span>
+<span id="cb10-21"><a href=""></a>generalistas_idx <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n_generalistas</span>
+<span id="cb10-22"><a href=""></a></span>
+<span id="cb10-23"><a href=""></a><span class="cf">for</span>(i <span class="cf">in</span> generalistas_idx) {</span>
+<span id="cb10-24"><a href=""></a>  <span class="co"># Generalistas interagem com 40-60% das plantas</span></span>
+<span id="cb10-25"><a href=""></a>  n_parceiros <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">round</span>(n_arv <span class="sc">*</span> <span class="fl">0.4</span>)<span class="sc">:</span><span class="fu">round</span>(n_arv <span class="sc">*</span> <span class="fl">0.6</span>), <span class="dv">1</span>)</span>
+<span id="cb10-26"><a href=""></a>  parceiros <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n_arv, n_parceiros)</span>
+<span id="cb10-27"><a href=""></a>  </span>
+<span id="cb10-28"><a href=""></a>  <span class="co"># Frequência de visitas: alta</span></span>
+<span id="cb10-29"><a href=""></a>  matriz_frugivoria[i, parceiros] <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n_parceiros, <span class="at">lambda =</span> <span class="dv">8</span>)</span>
+<span id="cb10-30"><a href=""></a>}</span>
+<span id="cb10-31"><a href=""></a></span>
+<span id="cb10-32"><a href=""></a><span class="co"># 2. MODERADOS (60% das espécies) - interações médias</span></span>
+<span id="cb10-33"><a href=""></a>moderados_idx <span class="ot">&lt;-</span> (n_generalistas <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">round</span>(n_frug <span class="sc">*</span> <span class="fl">0.70</span>)</span>
+<span id="cb10-34"><a href=""></a></span>
+<span id="cb10-35"><a href=""></a><span class="cf">for</span>(i <span class="cf">in</span> moderados_idx) {</span>
+<span id="cb10-36"><a href=""></a>  <span class="co"># Moderados interagem com 15-35% das plantas</span></span>
+<span id="cb10-37"><a href=""></a>  n_parceiros <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">round</span>(n_arv <span class="sc">*</span> <span class="fl">0.15</span>)<span class="sc">:</span><span class="fu">round</span>(n_arv <span class="sc">*</span> <span class="fl">0.35</span>), <span class="dv">1</span>)</span>
+<span id="cb10-38"><a href=""></a>  parceiros <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n_arv, n_parceiros)</span>
+<span id="cb10-39"><a href=""></a>  </span>
+<span id="cb10-40"><a href=""></a>  <span class="co"># Frequência de visitas: média</span></span>
+<span id="cb10-41"><a href=""></a>  matriz_frugivoria[i, parceiros] <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n_parceiros, <span class="at">lambda =</span> <span class="dv">4</span>)</span>
+<span id="cb10-42"><a href=""></a>}</span>
+<span id="cb10-43"><a href=""></a></span>
+<span id="cb10-44"><a href=""></a><span class="co"># 3. ESPECIALISTAS (30% das espécies) - poucas interações</span></span>
+<span id="cb10-45"><a href=""></a>especialistas_idx <span class="ot">&lt;-</span> (<span class="fu">round</span>(n_frug <span class="sc">*</span> <span class="fl">0.70</span>) <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n_frug</span>
+<span id="cb10-46"><a href=""></a></span>
+<span id="cb10-47"><a href=""></a><span class="cf">for</span>(i <span class="cf">in</span> especialistas_idx) {</span>
+<span id="cb10-48"><a href=""></a>  <span class="co"># Especialistas interagem com 5-15% das plantas</span></span>
+<span id="cb10-49"><a href=""></a>  n_parceiros <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">round</span>(n_arv <span class="sc">*</span> <span class="fl">0.05</span>)<span class="sc">:</span><span class="fu">round</span>(n_arv <span class="sc">*</span> <span class="fl">0.15</span>), <span class="dv">1</span>)</span>
+<span id="cb10-50"><a href=""></a>  n_parceiros <span class="ot">&lt;-</span> <span class="fu">max</span>(n_parceiros, <span class="dv">1</span>)  <span class="co"># Pelo menos 1 parceiro</span></span>
+<span id="cb10-51"><a href=""></a>  parceiros <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n_arv, n_parceiros)</span>
+<span id="cb10-52"><a href=""></a>  </span>
+<span id="cb10-53"><a href=""></a>  <span class="co"># Frequência de visitas: variável (alguns muito especializados)</span></span>
+<span id="cb10-54"><a href=""></a>  <span class="cf">if</span>(<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&gt;</span> <span class="fl">0.7</span>) {</span>
+<span id="cb10-55"><a href=""></a>    <span class="co"># 30% dos especialistas têm uma interação muito forte</span></span>
+<span id="cb10-56"><a href=""></a>    matriz_frugivoria[i, parceiros] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rpois</span>(<span class="dv">1</span>, <span class="at">lambda =</span> <span class="dv">15</span>),</span>
+<span id="cb10-57"><a href=""></a>                                         <span class="fu">rpois</span>(n_parceiros<span class="dv">-1</span>, <span class="at">lambda =</span> <span class="dv">2</span>))</span>
+<span id="cb10-58"><a href=""></a>  } <span class="cf">else</span> {</span>
+<span id="cb10-59"><a href=""></a>    matriz_frugivoria[i, parceiros] <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n_parceiros, <span class="at">lambda =</span> <span class="dv">3</span>)</span>
+<span id="cb10-60"><a href=""></a>  }</span>
+<span id="cb10-61"><a href=""></a>}</span>
+<span id="cb10-62"><a href=""></a></span>
+<span id="cb10-63"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb10-64"><a href=""></a><span class="co"># AJUSTES ECOLÓGICOS REALISTAS</span></span>
+<span id="cb10-65"><a href=""></a><span class="co"># ============================================</span></span>
+<span id="cb10-66"><a href=""></a></span>
+<span id="cb10-67"><a href=""></a><span class="co"># Araucária: especialistas importantes (Gralha-azul, papagaios, cutia)</span></span>
+<span id="cb10-68"><a href=""></a>araucaria_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">colnames</span>(matriz_frugivoria) <span class="sc">==</span> <span class="st">"Araucaria angustifolia"</span>)</span>
+<span id="cb10-69"><a href=""></a>gralha_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">rownames</span>(matriz_frugivoria) <span class="sc">==</span> <span class="st">"Cyanocorax caeruleus"</span>)</span>
+<span id="cb10-70"><a href=""></a>cutia_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">rownames</span>(matriz_frugivoria) <span class="sc">==</span> <span class="st">"Dasyprocta azarae"</span>)</span>
+<span id="cb10-71"><a href=""></a></span>
+<span id="cb10-72"><a href=""></a>matriz_frugivoria[gralha_idx, araucaria_idx] <span class="ot">&lt;-</span> <span class="dv">45</span>  <span class="co"># Interação muito forte</span></span>
+<span id="cb10-73"><a href=""></a>matriz_frugivoria[cutia_idx, araucaria_idx] <span class="ot">&lt;-</span> <span class="dv">38</span></span>
+<span id="cb10-74"><a href=""></a></span>
+<span id="cb10-75"><a href=""></a><span class="co"># Myrtaceae: muito visitadas por tucanos e sabiás</span></span>
+<span id="cb10-76"><a href=""></a>myrtaceae_idx <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"Eugenia|Psidium|Campomanesia|Myrcia"</span>, </span>
+<span id="cb10-77"><a href=""></a>                     <span class="fu">colnames</span>(matriz_frugivoria))</span>
+<span id="cb10-78"><a href=""></a>tucanos_idx <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"Ramphastos"</span>, <span class="fu">rownames</span>(matriz_frugivoria))</span>
+<span id="cb10-79"><a href=""></a>sabias_idx <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"Turdus"</span>, <span class="fu">rownames</span>(matriz_frugivoria))</span>
+<span id="cb10-80"><a href=""></a></span>
+<span id="cb10-81"><a href=""></a><span class="cf">for</span>(i <span class="cf">in</span> tucanos_idx) {</span>
+<span id="cb10-82"><a href=""></a>  parceiros_myr <span class="ot">&lt;-</span> <span class="fu">sample</span>(myrtaceae_idx, </span>
+<span id="cb10-83"><a href=""></a>                         <span class="fu">min</span>(<span class="dv">4</span>, <span class="fu">length</span>(myrtaceae_idx)))</span>
+<span id="cb10-84"><a href=""></a>  matriz_frugivoria[i, parceiros_myr] <span class="ot">&lt;-</span> </span>
+<span id="cb10-85"><a href=""></a>    matriz_frugivoria[i, parceiros_myr] <span class="sc">+</span> <span class="fu">rpois</span>(<span class="fu">length</span>(parceiros_myr), <span class="dv">5</span>)</span>
+<span id="cb10-86"><a href=""></a>}</span>
+<span id="cb10-87"><a href=""></a></span>
+<span id="cb10-88"><a href=""></a><span class="co"># Remover alguns zeros para criar rede mais realista</span></span>
+<span id="cb10-89"><a href=""></a><span class="co"># (algumas espécies raras sem interações observadas)</span></span>
+<span id="cb10-90"><a href=""></a>especies_raras <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n_frug, <span class="fu">round</span>(n_frug <span class="sc">*</span> <span class="fl">0.05</span>))</span>
+<span id="cb10-91"><a href=""></a><span class="cf">for</span>(i <span class="cf">in</span> especies_raras) {</span>
+<span id="cb10-92"><a href=""></a>  <span class="cf">if</span>(<span class="fu">sum</span>(matriz_frugivoria[i, ]) <span class="sc">&lt;</span> <span class="dv">5</span>) {</span>
+<span id="cb10-93"><a href=""></a>    matriz_frugivoria[i, ] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb10-94"><a href=""></a>  }</span>
+<span id="cb10-95"><a href=""></a>}</span>
+<span id="cb10-96"><a href=""></a></span>
+<span id="cb10-97"><a href=""></a><span class="co"># Remover espécies sem nenhuma interação</span></span>
+<span id="cb10-98"><a href=""></a>matriz_frugivoria <span class="ot">&lt;-</span> matriz_frugivoria[<span class="fu">rowSums</span>(matriz_frugivoria) <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
+<span id="cb10-99"><a href=""></a>matriz_frugivoria <span class="ot">&lt;-</span> matriz_frugivoria[, <span class="fu">colSums</span>(matriz_frugivoria) <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb10-100"><a href=""></a></span>
+<span id="cb10-101"><a href=""></a><span class="co"># Estatísticas da rede</span></span>
+<span id="cb10-102"><a href=""></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">=== ESTATÍSTICAS DA REDE CRIADA ===</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+=== ESTATÍSTICAS DA REDE CRIADA ===</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Dimensões finais:"</span>, <span class="fu">nrow</span>(matriz_frugivoria), <span class="st">"×"</span>, </span>
+<span id="cb12-2"><a href=""></a>    <span class="fu">ncol</span>(matriz_frugivoria), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dimensões finais: 37 × 33 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Total de interações:"</span>, <span class="fu">sum</span>(matriz_frugivoria <span class="sc">&gt;</span> <span class="dv">0</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total de interações: 280 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Total de visitas:"</span>, <span class="fu">sum</span>(matriz_frugivoria), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total de visitas: 1489 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Conectância:"</span>, <span class="fu">round</span>(<span class="fu">sum</span>(matriz_frugivoria <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">/</span> </span>
+<span id="cb18-2"><a href=""></a>    (<span class="fu">nrow</span>(matriz_frugivoria) <span class="sc">*</span> <span class="fu">ncol</span>(matriz_frugivoria)), <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Conectância: 0.229 </code></pre>
+</div>
+</div>
+</section>
+<section id="visualizar-nossos-dados-simulados" class="slide level2">
+<h2>Visualizar Nossos Dados Simulados</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="co"># Visualizar matriz</span></span>
+<span id="cb20-2"><a href=""></a><span class="fu">visweb</span>(matriz_frugivoria,</span>
+<span id="cb20-3"><a href=""></a>       <span class="at">type =</span> <span class="st">"nested"</span>,</span>
+<span id="cb20-4"><a href=""></a>       <span class="at">labsize =</span> <span class="fl">0.8</span>,</span>
+<span id="cb20-5"><a href=""></a>       <span class="at">text =</span> <span class="st">"none"</span>,</span>
+<span id="cb20-6"><a href=""></a>       <span class="at">square =</span> <span class="st">"b"</span>)</span>
+<span id="cb20-7"><a href=""></a><span class="fu">title</span>(<span class="at">main =</span> <span class="st">"Rede de Frugivoria - Floresta com Araucária</span><span class="sc">\n</span><span class="st">(Dados Didáticos)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"></section>
+<section id="primeiras-impressões-da-rede" class="slide level2">
+<h2>Primeiras Impressões da Rede 👀</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="co"># Quantas espécies de frugívoros?</span></span>
+<span id="cb21-2"><a href=""></a><span class="fu">nrow</span>(matriz_frugivoria)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 37</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="co"># Quantas espécies de árvores?</span></span>
+<span id="cb23-2"><a href=""></a><span class="fu">ncol</span>(matriz_frugivoria)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 33</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="co"># Quantas interações diferentes foram observadas?</span></span>
+<span id="cb25-2"><a href=""></a><span class="fu">sum</span>(matriz_frugivoria <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 280</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="co"># Qual o total de visitas registradas?</span></span>
+<span id="cb27-2"><a href=""></a><span class="fu">sum</span>(matriz_frugivoria)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1489</code></pre>
+</div>
+</div>
+</section>
+<section id="distribuição-de-interações" class="slide level2">
+<h2>Distribuição de Interações</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="co"># Distribuição de parceiros por frugívoro (quantas plantas cada ave/mamífero visitou?)</span></span>
+<span id="cb29-2"><a href=""></a><span class="fu">summary</span>(<span class="fu">rowSums</span>(matriz_frugivoria <span class="sc">&gt;</span> <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  2.000   5.000   7.000   7.568   9.000  20.000 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># Distribuição de visitantes por árvore (quantos frugívoros visitaram cada planta?)</span></span>
+<span id="cb31-2"><a href=""></a><span class="fu">summary</span>(<span class="fu">colSums</span>(matriz_frugivoria <span class="sc">&gt;</span> <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  3.000   7.000   8.000   8.485  10.000  16.000 </code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="parte-4-análises-de-rede" class="title-slide slide level1 center" data-background-color="#2C5F2D">
+<h1>Parte 4: Análises de Rede</h1>
+<p><strong>Duração: 45 minutos</strong></p>
+</section>
+<section id="métricas-de-nível-de-rede" class="slide level2">
+<h2>Métricas de Nível de Rede</h2>
+<p><strong>Calcular propriedades da rede com <code>networklevel()</code>:</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a><span class="co"># Calcular todas as métricas de uma vez</span></span>
+<span id="cb33-2"><a href=""></a>metricas_rede <span class="ot">&lt;-</span> <span class="fu">networklevel</span>(</span>
+<span id="cb33-3"><a href=""></a>  matriz_frugivoria,</span>
+<span id="cb33-4"><a href=""></a>  <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"connectance"</span>, <span class="st">"weighted connectance"</span>, <span class="st">"H2"</span>,</span>
+<span id="cb33-5"><a href=""></a>            <span class="st">"weighted NODF"</span>, <span class="st">"links per species"</span>)</span>
+<span id="cb33-6"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="conectividade-da-rede" class="slide level2">
+<h2>Conectividade da Rede</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="co"># Quão conectada é a rede? (proporção de links possíveis que existem)</span></span>
+<span id="cb34-2"><a href=""></a>metricas_rede[<span class="st">"connectance"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>connectance 
+  0.2293202 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="co"># Conectância ponderada (considerando intensidade das interações)</span></span>
+<span id="cb36-2"><a href=""></a>metricas_rede[<span class="st">"weighted connectance"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>weighted connectance 
+           0.1238612 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="co"># Média de parceiros por espécie</span></span>
+<span id="cb38-2"><a href=""></a>metricas_rede[<span class="st">"links per species"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>links per species 
+                4 </code></pre>
+</div>
+</div>
+</section>
+<section id="especialização-e-aninhamento" class="slide level2">
+<h2>Especialização e Aninhamento</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a><span class="co"># H2: Especialização da rede (0=generalista, 1=especialista)</span></span>
+<span id="cb40-2"><a href=""></a>metricas_rede[<span class="st">"H2"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       H2 
+0.3999985 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a><span class="co"># NODF: Aninhamento (0-100, quanto maior mais aninhada)</span></span>
+<span id="cb42-2"><a href=""></a>metricas_rede[<span class="st">"weighted NODF"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>weighted NODF 
+     15.75039 </code></pre>
+</div>
+</div>
+</section>
+<section id="interpretando-h2" class="slide level2">
+<h2>Interpretando H2</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a>h2_valor <span class="ot">&lt;-</span> metricas_rede[<span class="st">"H2"</span>]</span>
+<span id="cb44-2"><a href=""></a></span>
+<span id="cb44-3"><a href=""></a><span class="fu">cat</span>(<span class="st">"=== INTERPRETAÇÃO DO H2 ===</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== INTERPRETAÇÃO DO H2 ===</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Valor observado:"</span>, <span class="fu">round</span>(h2_valor, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Valor observado: 0.4 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="cf">if</span>(h2_valor <span class="sc">&lt;</span> <span class="fl">0.3</span>) {</span>
+<span id="cb48-2"><a href=""></a>  interpretacao <span class="ot">&lt;-</span> <span class="st">"BAIXA especialização</span><span class="sc">\n</span><span class="st">  → Rede com interações generalistas</span><span class="sc">\n</span><span class="st">  → Espécies com dietas amplas</span><span class="sc">\n</span><span class="st">  → Baixa seletividade"</span></span>
+<span id="cb48-3"><a href=""></a>} <span class="cf">else</span> <span class="cf">if</span>(h2_valor <span class="sc">&lt;</span> <span class="fl">0.6</span>) {</span>
+<span id="cb48-4"><a href=""></a>  interpretacao <span class="ot">&lt;-</span> <span class="st">"MODERADA especialização</span><span class="sc">\n</span><span class="st">  → Mix de generalistas e especialistas</span><span class="sc">\n</span><span class="st">  → Padrão comum em redes mutualísticas</span><span class="sc">\n</span><span class="st">  → Rede com estrutura intermediária"</span></span>
+<span id="cb48-5"><a href=""></a>} <span class="cf">else</span> {</span>
+<span id="cb48-6"><a href=""></a>  interpretacao <span class="ot">&lt;-</span> <span class="st">"ALTA especialização</span><span class="sc">\n</span><span class="st">  → Interações muito seletivas</span><span class="sc">\n</span><span class="st">  → Forte potencial para coevolução</span><span class="sc">\n</span><span class="st">  → Rede altamente estruturada"</span></span>
+<span id="cb48-7"><a href=""></a>}</span>
+<span id="cb48-8"><a href=""></a></span>
+<span id="cb48-9"><a href=""></a><span class="fu">cat</span>(interpretacao, <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MODERADA especialização
+  → Mix de generalistas e especialistas
+  → Padrão comum em redes mutualísticas
+  → Rede com estrutura intermediária </code></pre>
+</div>
+</div>
+</section>
+<section id="interpretando-aninhamento" class="slide level2">
+<h2>Interpretando Aninhamento</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="co"># Valor de NODF observado</span></span>
+<span id="cb50-2"><a href=""></a>nodf_valor <span class="ot">&lt;-</span> metricas_rede[<span class="st">"weighted NODF"</span>]</span>
+<span id="cb50-3"><a href=""></a>nodf_valor</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>weighted NODF 
+     15.75039 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a><span class="co"># Classificação automática</span></span>
+<span id="cb52-2"><a href=""></a><span class="cf">if</span>(nodf_valor <span class="sc">&lt;</span> <span class="dv">20</span>) {</span>
+<span id="cb52-3"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"BAIXO aninhamento → Estrutura mais modular"</span>)</span>
+<span id="cb52-4"><a href=""></a>} <span class="cf">else</span> <span class="cf">if</span>(nodf_valor <span class="sc">&lt;</span> <span class="dv">40</span>) {</span>
+<span id="cb52-5"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"MODERADO aninhamento → Hierarquia parcial"</span>)</span>
+<span id="cb52-6"><a href=""></a>} <span class="cf">else</span> {</span>
+<span id="cb52-7"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"ALTO aninhamento → Hierarquia clara"</span>)</span>
+<span id="cb52-8"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>BAIXO aninhamento → Estrutura mais modular</code></pre>
+</div>
+</div>
+</section>
+<section id="implicações-do-aninhamento-para-conservação" class="slide level2">
+<h2>Implicações do Aninhamento para Conservação</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a><span class="co"># O que significa para conservação?</span></span>
+<span id="cb54-2"><a href=""></a><span class="cf">if</span>(nodf_valor <span class="sc">&gt;</span> <span class="dv">30</span>) {</span>
+<span id="cb54-3"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"✓ Rede ANINHADA</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb54-4"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"  • Perda de especialistas tem impacto menor</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb54-5"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"  • Generalistas mantêm conectividade</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb54-6"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"  • Rede relativamente estável</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb54-7"><a href=""></a>} <span class="cf">else</span> {</span>
+<span id="cb54-8"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"⚠ Rede POUCO ANINHADA - Atenção!</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb54-9"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"  • Rede mais vulnerável</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb54-10"><a href=""></a>  <span class="fu">cat</span>(<span class="st">"  • Extinções podem causar efeitos em cascata</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb54-11"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>⚠ Rede POUCO ANINHADA - Atenção!
+
+  • Rede mais vulnerável
+  • Extinções podem causar efeitos em cascata</code></pre>
+</div>
+</div>
+</section>
+<section id="visualização-rede-completa" class="slide level2">
+<h2>Visualização: Rede Completa 🕸️</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a><span class="co"># Criar visualização mais elaborada</span></span>
+<span id="cb56-2"><a href=""></a><span class="fu">plotweb</span>(matriz_frugivoria,</span>
+<span id="cb56-3"><a href=""></a>        <span class="at">method =</span> <span class="st">"normal"</span>,</span>
+<span id="cb56-4"><a href=""></a>        <span class="at">text.rot =</span> <span class="dv">90</span>,</span>
+<span id="cb56-5"><a href=""></a>        <span class="at">col.interaction =</span> <span class="st">"grey80"</span>,</span>
+<span id="cb56-6"><a href=""></a>        <span class="at">bor.col.interaction =</span> <span class="st">"grey60"</span>,</span>
+<span id="cb56-7"><a href=""></a>        <span class="at">col.high =</span> <span class="st">"#FF6B6B"</span>,      <span class="co"># Frugívoros em vermelho</span></span>
+<span id="cb56-8"><a href=""></a>        <span class="at">col.low =</span> <span class="st">"#4ECDC4"</span>,       <span class="co"># Árvores em azul</span></span>
+<span id="cb56-9"><a href=""></a>        <span class="at">bor.col.high =</span> <span class="st">"#C44569"</span>,</span>
+<span id="cb56-10"><a href=""></a>        <span class="at">bor.col.low =</span> <span class="st">"#227C9D"</span>,</span>
+<span id="cb56-11"><a href=""></a>        <span class="at">labsize =</span> <span class="fl">0.7</span>,</span>
+<span id="cb56-12"><a href=""></a>        <span class="at">y.lim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb56-13"><a href=""></a><span class="fu">title</span>(<span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">"Rede de Frugivoria - Floresta com Araucária</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb56-14"><a href=""></a>                   <span class="st">"H2 = "</span>, <span class="fu">round</span>(h2_valor, <span class="dv">3</span>),</span>
+<span id="cb56-15"><a href=""></a>                   <span class="st">" | NODF = "</span>, <span class="fu">round</span>(nodf_valor, <span class="dv">1</span>),</span>
+<span id="cb56-16"><a href=""></a>                   <span class="st">" | Conectância = "</span>,</span>
+<span id="cb56-17"><a href=""></a>                   <span class="fu">round</span>(metricas_rede[<span class="st">"weighted connectance"</span>], <span class="dv">3</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-19-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1344"></section>
+<section id="métricas-de-nível-de-espécie" class="slide level2">
+<h2>Métricas de Nível de Espécie</h2>
+<p><strong>Calcular métricas para cada espécie:</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a><span class="co"># Calcular com specieslevel()</span></span>
+<span id="cb57-2"><a href=""></a>metricas_especies <span class="ot">&lt;-</span> <span class="fu">specieslevel</span>(</span>
+<span id="cb57-3"><a href=""></a>  matriz_frugivoria,</span>
+<span id="cb57-4"><a href=""></a>  <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"degree"</span>, <span class="st">"species strength"</span>, <span class="st">"PDI"</span>)</span>
+<span id="cb57-5"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="separando-frugívoros-e-árvores" class="slide level2">
+<h2>Separando Frugívoros e Árvores</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href=""></a><span class="co"># Separar os dois níveis tróficos</span></span>
+<span id="cb58-2"><a href=""></a><span class="co"># higher level = parte de cima do grafo (árvores)</span></span>
+<span id="cb58-3"><a href=""></a><span class="co"># lower level = parte de baixo do grafo (frugívoros)</span></span>
+<span id="cb58-4"><a href=""></a>arv_metrics <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(metricas_especies<span class="sc">$</span><span class="st">`</span><span class="at">higher level</span><span class="st">`</span>)</span>
+<span id="cb58-5"><a href=""></a>frug_metrics <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(metricas_especies<span class="sc">$</span><span class="st">`</span><span class="at">lower level</span><span class="st">`</span>)</span>
+<span id="cb58-6"><a href=""></a></span>
+<span id="cb58-7"><a href=""></a><span class="co"># Adicionar coluna com nomes das espécies</span></span>
+<span id="cb58-8"><a href=""></a>frug_metrics<span class="sc">$</span>especie <span class="ot">&lt;-</span> <span class="fu">rownames</span>(frug_metrics)</span>
+<span id="cb58-9"><a href=""></a>arv_metrics<span class="sc">$</span>especie <span class="ot">&lt;-</span> <span class="fu">rownames</span>(arv_metrics)</span>
+<span id="cb58-10"><a href=""></a></span>
+<span id="cb58-11"><a href=""></a><span class="co"># Quantas espécies foram analisadas?</span></span>
+<span id="cb58-12"><a href=""></a><span class="fu">nrow</span>(frug_metrics)  <span class="co"># Frugívoros</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 37</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a><span class="fu">nrow</span>(arv_metrics)   <span class="co"># Árvores</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 33</code></pre>
+</div>
+</div>
+</section>
+<section id="top-10-frugívoros-mais-importantes" class="slide level2">
+<h2>Top 10 Frugívoros Mais Importantes 🦜</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href=""></a><span class="co"># Ordenar por força (strength)</span></span>
+<span id="cb62-2"><a href=""></a>top_frug <span class="ot">&lt;-</span> frug_metrics <span class="sc">%&gt;%</span></span>
+<span id="cb62-3"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(species.strength)) <span class="sc">%&gt;%</span></span>
+<span id="cb62-4"><a href=""></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb62-5"><a href=""></a>  <span class="fu">select</span>(especie, degree, species.strength, PDI)</span>
+<span id="cb62-6"><a href=""></a></span>
+<span id="cb62-7"><a href=""></a><span class="co"># Formatar tabela</span></span>
+<span id="cb62-8"><a href=""></a><span class="fu">kable</span>(top_frug, </span>
+<span id="cb62-9"><a href=""></a>      <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb62-10"><a href=""></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Espécie"</span>, <span class="st">"Grau"</span>, <span class="st">"Força"</span>, <span class="st">"PDI"</span>),</span>
+<span id="cb62-11"><a href=""></a>      <span class="at">caption =</span> <span class="st">"Top 10 Frugívoros por Força de Interação"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Top 10 Frugívoros por Força de Interação</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Espécie</th>
+<th style="text-align: right;">Grau</th>
+<th style="text-align: right;">Força</th>
+<th style="text-align: right;">PDI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Ramphastos dicolorus</td>
+<td style="text-align: left;">Ramphastos dicolorus</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">4.487</td>
+<td style="text-align: right;">0.618</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Amazona vinacea</td>
+<td style="text-align: left;">Amazona vinacea</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">3.248</td>
+<td style="text-align: right;">0.719</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cyanocorax caeruleus</td>
+<td style="text-align: left;">Cyanocorax caeruleus</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">2.864</td>
+<td style="text-align: right;">0.925</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Amazona pretrei</td>
+<td style="text-align: left;">Amazona pretrei</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">2.734</td>
+<td style="text-align: right;">0.714</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tyrannus melancholicus</td>
+<td style="text-align: left;">Tyrannus melancholicus</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.188</td>
+<td style="text-align: right;">0.807</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Myiodynastes maculatus</td>
+<td style="text-align: left;">Myiodynastes maculatus</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.168</td>
+<td style="text-align: right;">0.858</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Leucochloris albicollis</td>
+<td style="text-align: left;">Leucochloris albicollis</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.010</td>
+<td style="text-align: right;">0.835</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dacnis cayana</td>
+<td style="text-align: left;">Dacnis cayana</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.956</td>
+<td style="text-align: right;">0.868</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tangara sayaca</td>
+<td style="text-align: left;">Tangara sayaca</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.894</td>
+<td style="text-align: right;">0.848</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pyroderus scutatus</td>
+<td style="text-align: left;">Pyroderus scutatus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.884</td>
+<td style="text-align: right;">0.821</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Interpretação:</strong></p>
+<ul>
+<li><strong>Força alta</strong> = muitas visitas totais (dispersor importante)</li>
+<li><strong>Grau alto</strong> = muitas espécies visitadas (generalista)</li>
+<li><strong>PDI baixo</strong> = generalista | <strong>PDI alto</strong> = especialista</li>
+</ul>
+</section>
+<section id="top-10-árvores-mais-visitadas" class="slide level2">
+<h2>Top 10 Árvores Mais Visitadas</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a><span class="co"># Ordenar por força (strength)</span></span>
+<span id="cb63-2"><a href=""></a>top_arv <span class="ot">&lt;-</span> arv_metrics <span class="sc">%&gt;%</span></span>
+<span id="cb63-3"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(species.strength)) <span class="sc">%&gt;%</span></span>
+<span id="cb63-4"><a href=""></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb63-5"><a href=""></a>  <span class="fu">select</span>(especie, degree, species.strength, PDI)</span>
+<span id="cb63-6"><a href=""></a></span>
+<span id="cb63-7"><a href=""></a><span class="co"># Formatar tabela</span></span>
+<span id="cb63-8"><a href=""></a><span class="fu">kable</span>(top_arv, </span>
+<span id="cb63-9"><a href=""></a>      <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb63-10"><a href=""></a>      <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Espécie"</span>, <span class="st">"Grau"</span>, <span class="st">"Força"</span>, <span class="st">"PDI"</span>),</span>
+<span id="cb63-11"><a href=""></a>      <span class="at">caption =</span> <span class="st">"Top 10 Árvores por Frequência de Visitação"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Top 10 Árvores por Frequência de Visitação</caption>
+<colgroup>
+<col style="width: 37%">
+<col style="width: 37%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Espécie</th>
+<th style="text-align: right;">Grau</th>
+<th style="text-align: right;">Força</th>
+<th style="text-align: right;">PDI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sebastiania commersoniana</td>
+<td style="text-align: left;">Sebastiania commersoniana</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">2.390</td>
+<td style="text-align: right;">0.828</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Araucaria angustifolia</td>
+<td style="text-align: left;">Araucaria angustifolia</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">2.242</td>
+<td style="text-align: right;">0.943</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Eugenia uniflora</td>
+<td style="text-align: left;">Eugenia uniflora</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1.664</td>
+<td style="text-align: right;">0.869</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Myrcianthes pungens</td>
+<td style="text-align: left;">Myrcianthes pungens</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.585</td>
+<td style="text-align: right;">0.872</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Casearia decandra</td>
+<td style="text-align: left;">Casearia decandra</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.559</td>
+<td style="text-align: right;">0.900</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Zanthoxylum rhoifolium</td>
+<td style="text-align: left;">Zanthoxylum rhoifolium</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1.474</td>
+<td style="text-align: right;">0.892</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Prunus myrtifolia</td>
+<td style="text-align: left;">Prunus myrtifolia</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1.453</td>
+<td style="text-align: right;">0.851</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ilex theezans</td>
+<td style="text-align: left;">Ilex theezans</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1.446</td>
+<td style="text-align: right;">0.892</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Campomanesia xanthocarpa</td>
+<td style="text-align: left;">Campomanesia xanthocarpa</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1.430</td>
+<td style="text-align: right;">0.952</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Myrsine coriacea</td>
+<td style="text-align: left;">Myrsine coriacea</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1.332</td>
+<td style="text-align: right;">0.889</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Interpretação:</strong></p>
+<ul>
+<li><strong>Força alta</strong> = recurso muito usado</li>
+<li><strong>Grau alto</strong> = visitada por muitos frugívoros</li>
+<li><strong>PDI baixo</strong> = generalista | <strong>PDI alto</strong> = especialista</li>
+</ul>
+</section>
+<section id="identificando-espécies-chave" class="slide level2">
+<h2>Identificando Espécies-Chave</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a><span class="co"># Classificar frugívoros</span></span>
+<span id="cb64-2"><a href=""></a>frug_metrics <span class="ot">&lt;-</span> frug_metrics <span class="sc">%&gt;%</span></span>
+<span id="cb64-3"><a href=""></a>  <span class="fu">mutate</span>(</span>
+<span id="cb64-4"><a href=""></a>    <span class="at">tipo =</span> <span class="fu">case_when</span>(</span>
+<span id="cb64-5"><a href=""></a>      degree <span class="sc">&gt;=</span> <span class="fu">quantile</span>(degree, <span class="fl">0.75</span>) <span class="sc">&amp;</span> </span>
+<span id="cb64-6"><a href=""></a>        species.strength <span class="sc">&gt;=</span> <span class="fu">quantile</span>(species.strength, <span class="fl">0.75</span>) <span class="sc">~</span> <span class="st">"Super-generalista"</span>,</span>
+<span id="cb64-7"><a href=""></a>      degree <span class="sc">&gt;=</span> <span class="fu">quantile</span>(degree, <span class="fl">0.75</span>) <span class="sc">~</span> <span class="st">"Generalista"</span>,</span>
+<span id="cb64-8"><a href=""></a>      species.strength <span class="sc">&gt;=</span> <span class="fu">quantile</span>(species.strength, <span class="fl">0.75</span>) <span class="sc">~</span> <span class="st">"Especialista forte"</span>,</span>
+<span id="cb64-9"><a href=""></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Periférico"</span></span>
+<span id="cb64-10"><a href=""></a>    )</span>
+<span id="cb64-11"><a href=""></a>  )</span>
+<span id="cb64-12"><a href=""></a></span>
+<span id="cb64-13"><a href=""></a><span class="co"># Plotar</span></span>
+<span id="cb64-14"><a href=""></a><span class="fu">ggplot</span>(frug_metrics, <span class="fu">aes</span>(<span class="at">x =</span> degree, <span class="at">y =</span> species.strength, </span>
+<span id="cb64-15"><a href=""></a>                        <span class="at">color =</span> tipo, <span class="at">size =</span> PDI)) <span class="sc">+</span></span>
+<span id="cb64-16"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb64-17"><a href=""></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb64-18"><a href=""></a>    <span class="st">"Super-generalista"</span> <span class="ot">=</span> <span class="st">"#FF6B6B"</span>,</span>
+<span id="cb64-19"><a href=""></a>    <span class="st">"Generalista"</span> <span class="ot">=</span> <span class="st">"#4ECDC4"</span>,</span>
+<span id="cb64-20"><a href=""></a>    <span class="st">"Especialista forte"</span> <span class="ot">=</span> <span class="st">"#FFE66D"</span>,</span>
+<span id="cb64-21"><a href=""></a>    <span class="st">"Periférico"</span> <span class="ot">=</span> <span class="st">"#95E1D3"</span></span>
+<span id="cb64-22"><a href=""></a>  )) <span class="sc">+</span></span>
+<span id="cb64-23"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb64-24"><a href=""></a>    <span class="at">title =</span> <span class="st">"Identificação de Espécies-Chave de Frugívoros"</span>,</span>
+<span id="cb64-25"><a href=""></a>    <span class="at">subtitle =</span> <span class="st">"Baseado em Grau e Força de Interação"</span>,</span>
+<span id="cb64-26"><a href=""></a>    <span class="at">x =</span> <span class="st">"Grau (número de parceiros)"</span>,</span>
+<span id="cb64-27"><a href=""></a>    <span class="at">y =</span> <span class="st">"Força (total de interações)"</span>,</span>
+<span id="cb64-28"><a href=""></a>    <span class="at">color =</span> <span class="st">"Tipo funcional"</span>,</span>
+<span id="cb64-29"><a href=""></a>    <span class="at">size =</span> <span class="st">"Especialização (PDI)"</span></span>
+<span id="cb64-30"><a href=""></a>  ) <span class="sc">+</span></span>
+<span id="cb64-31"><a href=""></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb64-32"><a href=""></a>  <span class="fu">theme</span>(</span>
+<span id="cb64-33"><a href=""></a>    <span class="at">legend.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb64-34"><a href=""></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb64-35"><a href=""></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb64-36"><a href=""></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-24-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"></section>
+<section id="distribuição-de-especialização-pdi" class="slide level2">
+<h2>Distribuição de Especialização (PDI)</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb65-2"><a href=""></a></span>
+<span id="cb65-3"><a href=""></a><span class="co"># Histograma frugívoros</span></span>
+<span id="cb65-4"><a href=""></a><span class="fu">hist</span>(frug_metrics<span class="sc">$</span>PDI,</span>
+<span id="cb65-5"><a href=""></a>     <span class="at">breaks =</span> <span class="dv">15</span>,</span>
+<span id="cb65-6"><a href=""></a>     <span class="at">col =</span> <span class="st">"#FF6B6B"</span>,</span>
+<span id="cb65-7"><a href=""></a>     <span class="at">border =</span> <span class="st">"white"</span>,</span>
+<span id="cb65-8"><a href=""></a>     <span class="at">main =</span> <span class="st">"Especialização dos Frugívoros"</span>,</span>
+<span id="cb65-9"><a href=""></a>     <span class="at">xlab =</span> <span class="st">"PDI (0 = generalista, 1 = especialista)"</span>,</span>
+<span id="cb65-10"><a href=""></a>     <span class="at">ylab =</span> <span class="st">"Frequência"</span>,</span>
+<span id="cb65-11"><a href=""></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb65-12"><a href=""></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(frug_metrics<span class="sc">$</span>PDI), <span class="at">col =</span> <span class="st">"darkred"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb65-13"><a href=""></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">paste</span>(<span class="st">"Média ="</span>, <span class="fu">round</span>(<span class="fu">mean</span>(frug_metrics<span class="sc">$</span>PDI), <span class="dv">2</span>)),</span>
+<span id="cb65-14"><a href=""></a>       <span class="at">col =</span> <span class="st">"darkred"</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb65-15"><a href=""></a></span>
+<span id="cb65-16"><a href=""></a><span class="co"># Histograma árvores</span></span>
+<span id="cb65-17"><a href=""></a><span class="fu">hist</span>(arv_metrics<span class="sc">$</span>PDI,</span>
+<span id="cb65-18"><a href=""></a>     <span class="at">breaks =</span> <span class="dv">15</span>,</span>
+<span id="cb65-19"><a href=""></a>     <span class="at">col =</span> <span class="st">"#4ECDC4"</span>,</span>
+<span id="cb65-20"><a href=""></a>     <span class="at">border =</span> <span class="st">"white"</span>,</span>
+<span id="cb65-21"><a href=""></a>     <span class="at">main =</span> <span class="st">"Especialização das Árvores"</span>,</span>
+<span id="cb65-22"><a href=""></a>     <span class="at">xlab =</span> <span class="st">"PDI (0 = generalista, 1 = especialista)"</span>,</span>
+<span id="cb65-23"><a href=""></a>     <span class="at">ylab =</span> <span class="st">"Frequência"</span>,</span>
+<span id="cb65-24"><a href=""></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb65-25"><a href=""></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(arv_metrics<span class="sc">$</span>PDI), <span class="at">col =</span> <span class="st">"darkblue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb65-26"><a href=""></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">paste</span>(<span class="st">"Média ="</span>, <span class="fu">round</span>(<span class="fu">mean</span>(arv_metrics<span class="sc">$</span>PDI), <span class="dv">2</span>)),</span>
+<span id="cb65-27"><a href=""></a>       <span class="at">col =</span> <span class="st">"darkblue"</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href=""></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-25-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"></section>
+<section id="comparação-frugívoros-vs-árvores" class="slide level2">
+<h2>Comparação: Frugívoros vs Árvores</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a><span class="co"># Os dois grupos têm especialização diferente?</span></span>
+<span id="cb67-2"><a href=""></a>teste_pdi <span class="ot">&lt;-</span> <span class="fu">t.test</span>(frug_metrics<span class="sc">$</span>PDI, arv_metrics<span class="sc">$</span>PDI)</span>
+<span id="cb67-3"><a href=""></a>teste_pdi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  frug_metrics$PDI and arv_metrics$PDI
+t = -1.0559, df = 50.019, p-value = 0.2961
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.04566523  0.01419610
+sample estimates:
+mean of x mean of y 
+0.8984760 0.9142105 </code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="parte-5-modelos-nulos" class="title-slide slide level1 center" data-background-color="#2C5F2D">
+<h1>Parte 5: Modelos Nulos</h1>
+
+</section>
+<section id="por-que-modelos-nulos" class="slide level2">
+<h2>Por que Modelos Nulos?</h2>
+<p><strong>Pergunta:</strong> O H2 que encontramos é significativo ou apenas acaso?</p>
+<p><strong>Solução:</strong> Comparar com o esperado ao acaso (modelo nulo)</p>
+<p><strong>Como funciona:</strong></p>
+<ol type="1">
+<li>Aleatoriza matriz 1000 vezes</li>
+<li>Calcula H2 para cada matriz aleatória</li>
+<li>Compara observado vs.&nbsp;distribuição nula</li>
+<li><strong>p &lt; 0.05</strong> = padrão REAL (não aleatório)</li>
+</ol>
+</section>
+<section id="teste-nulo-para-h2" class="slide level2">
+<h2>Teste Nulo para H2</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a><span class="co"># Executar teste nulo (pode demorar ~1 min)</span></span>
+<span id="cb69-2"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb69-3"><a href=""></a>null_test_h2 <span class="ot">&lt;-</span> <span class="fu">null.t.test</span>(</span>
+<span id="cb69-4"><a href=""></a>  matriz_frugivoria,</span>
+<span id="cb69-5"><a href=""></a>  <span class="at">index =</span> <span class="st">"H2"</span>,</span>
+<span id="cb69-6"><a href=""></a>  <span class="at">nrep =</span> <span class="dv">100</span>,</span>
+<span id="cb69-7"><a href=""></a>  <span class="at">N =</span> <span class="dv">100</span>  <span class="co"># Reduzir para 100 se demorar muito</span></span>
+<span id="cb69-8"><a href=""></a>)</span>
+<span id="cb69-9"><a href=""></a></span>
+<span id="cb69-10"><a href=""></a><span class="co"># Resultado direto</span></span>
+<span id="cb69-11"><a href=""></a>null_test_h2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         obs  null mean   lower CI   upper CI         t             P
+H2 0.3999375 0.09745422 0.09660413 0.09830431 -706.0342 4.456483e-185</code></pre>
+</div>
+</div>
+</section>
+<section id="visualização-do-modelo-nulo" class="slide level2">
+<h2>Visualização do Modelo Nulo</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a><span class="co"># Gerar distribuição nula</span></span>
+<span id="cb71-2"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">456</span>)</span>
+<span id="cb71-3"><a href=""></a>nulls <span class="ot">&lt;-</span> <span class="fu">nullmodel</span>(matriz_frugivoria, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">method =</span> <span class="dv">1</span>)</span>
+<span id="cb71-4"><a href=""></a>null_H2 <span class="ot">&lt;-</span> <span class="fu">sapply</span>(nulls, <span class="cf">function</span>(x) <span class="fu">networklevel</span>(x, <span class="at">index =</span> <span class="st">"H2"</span>))</span>
+<span id="cb71-5"><a href=""></a>null_H2 <span class="ot">&lt;-</span> null_H2[<span class="fu">is.finite</span>(null_H2)]</span>
+<span id="cb71-6"><a href=""></a></span>
+<span id="cb71-7"><a href=""></a><span class="co"># Valor observado</span></span>
+<span id="cb71-8"><a href=""></a>h2_obs <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(null_test_h2[<span class="st">"observed"</span>])</span>
+<span id="cb71-9"><a href=""></a></span>
+<span id="cb71-10"><a href=""></a><span class="co"># Histograma</span></span>
+<span id="cb71-11"><a href=""></a><span class="fu">hist</span>(null_H2, <span class="at">breaks =</span> <span class="dv">40</span>, <span class="at">col =</span> <span class="st">"lightblue"</span>, <span class="at">border =</span> <span class="st">"white"</span>,</span>
+<span id="cb71-12"><a href=""></a>     <span class="at">main =</span> <span class="st">"H2: Observado vs. Esperado ao Acaso"</span>,</span>
+<span id="cb71-13"><a href=""></a>     <span class="at">xlab =</span> <span class="st">"H2 (Especialização)"</span>, <span class="at">ylab =</span> <span class="st">"Frequência"</span>)</span>
+<span id="cb71-14"><a href=""></a><span class="fu">abline</span>(<span class="at">v =</span> h2_obs, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb71-15"><a href=""></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(null_H2), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">3</span>)</span>
+<span id="cb71-16"><a href=""></a><span class="fu">legend</span>(<span class="st">"topright"</span>,</span>
+<span id="cb71-17"><a href=""></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Observado"</span>, <span class="st">"Média Nula"</span>),</span>
+<span id="cb71-18"><a href=""></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-28-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"></section></section>
+<section>
+<section id="parte-6-aplicações-práticas" class="title-slide slide level1 center" data-background-color="#2C5F2D">
+<h1>Parte 6: Aplicações Práticas</h1>
+<p><strong>Duração: 25 minutos</strong></p>
+</section>
+<section id="aplicação-1-priorização-para-conservação" class="slide level2">
+<h2>Aplicação 1: Priorização para Conservação 🛡️</h2>
+<p><strong>Como identificar espécies-chave para conservação?</strong></p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Critérios:</strong></p>
+<ul>
+<li><strong>Grau</strong>: Quantas plantas visitam</li>
+<li><strong>Força</strong>: Intensidade de interações</li>
+<li><strong>Índice</strong>: Combinação ponderada</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Categorias:</strong></p>
+<ul>
+<li>Crítico: ≥ 0.75</li>
+<li>Alto: 0.50-0.75</li>
+<li>Médio: 0.25-0.50</li>
+<li>Baixo: &lt; 0.25</li>
+</ul>
+</div></div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a><span class="co"># Criar índice de prioridade</span></span>
+<span id="cb72-2"><a href=""></a>frug_prioridade <span class="ot">&lt;-</span> frug_metrics <span class="sc">%&gt;%</span></span>
+<span id="cb72-3"><a href=""></a>  <span class="fu">mutate</span>(</span>
+<span id="cb72-4"><a href=""></a>    <span class="at">degree_norm =</span> (degree <span class="sc">-</span> <span class="fu">min</span>(degree)) <span class="sc">/</span> (<span class="fu">max</span>(degree) <span class="sc">-</span> <span class="fu">min</span>(degree)),</span>
+<span id="cb72-5"><a href=""></a>    <span class="at">strength_norm =</span> (species.strength <span class="sc">-</span> <span class="fu">min</span>(species.strength)) <span class="sc">/</span></span>
+<span id="cb72-6"><a href=""></a>                    (<span class="fu">max</span>(species.strength) <span class="sc">-</span> <span class="fu">min</span>(species.strength)),</span>
+<span id="cb72-7"><a href=""></a>    <span class="at">prioridade =</span> (degree_norm <span class="sc">*</span> <span class="fl">0.4</span>) <span class="sc">+</span> (strength_norm <span class="sc">*</span> <span class="fl">0.6</span>),</span>
+<span id="cb72-8"><a href=""></a>    <span class="at">categoria =</span> <span class="fu">case_when</span>(</span>
+<span id="cb72-9"><a href=""></a>      prioridade <span class="sc">&gt;=</span> <span class="fl">0.75</span> <span class="sc">~</span> <span class="st">"Crítico"</span>,</span>
+<span id="cb72-10"><a href=""></a>      prioridade <span class="sc">&gt;=</span> <span class="fl">0.50</span> <span class="sc">~</span> <span class="st">"Alto"</span>,</span>
+<span id="cb72-11"><a href=""></a>      prioridade <span class="sc">&gt;=</span> <span class="fl">0.25</span> <span class="sc">~</span> <span class="st">"Médio"</span>,</span>
+<span id="cb72-12"><a href=""></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Baixo"</span></span>
+<span id="cb72-13"><a href=""></a>    )</span>
+<span id="cb72-14"><a href=""></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb72-15"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(prioridade))</span>
+<span id="cb72-16"><a href=""></a></span>
+<span id="cb72-17"><a href=""></a><span class="co"># Top 10 prioritários</span></span>
+<span id="cb72-18"><a href=""></a>frug_prioridade <span class="sc">%&gt;%</span></span>
+<span id="cb72-19"><a href=""></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb72-20"><a href=""></a>  <span class="fu">select</span>(especie, degree, species.strength, prioridade, categoria)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                        especie degree species.strength
+Ramphastos dicolorus       Ramphastos dicolorus     20        4.4874924
+Amazona vinacea                 Amazona vinacea     16        3.2481745
+Cyanocorax caeruleus       Cyanocorax caeruleus     15        2.8636236
+Amazona pretrei                 Amazona pretrei     13        2.7343504
+Tyrannus melancholicus   Tyrannus melancholicus     11        1.1880924
+Myiodynastes maculatus   Myiodynastes maculatus     11        1.1683442
+Leucochloris albicollis Leucochloris albicollis     11        1.0104944
+Tangara sayaca                   Tangara sayaca     10        0.8942238
+Pyroderus scutatus           Pyroderus scutatus     10        0.8837958
+Dacnis cayana                     Dacnis cayana      9        0.9557244
+                        prioridade categoria
+Ramphastos dicolorus     1.0000000   Crítico
+Amazona vinacea          0.7423488      Alto
+Cyanocorax caeruleus     0.6677610      Alto
+Amazona pretrei          0.6057129      Alto
+Tyrannus melancholicus   0.3507091     Médio
+Myiodynastes maculatus   0.3480199     Médio
+Leucochloris albicollis  0.3265250     Médio
+Tangara sayaca           0.2884698     Médio
+Pyroderus scutatus       0.2870498     Médio
+Dacnis cayana            0.2746223     Médio</code></pre>
+</div>
+</div>
+</section>
+<section id="aplicação-2-planejamento-de-restauração" class="slide level2">
+<h2>Aplicação 2: Planejamento de Restauração 🌱</h2>
+<p><strong>Quais espécies arbóreas plantar primeiro?</strong></p>
+<p><strong>Critério:</strong> Árvores visitadas por muitos frugívoros diferentes</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a><span class="co"># Criar índice de restauração</span></span>
+<span id="cb74-2"><a href=""></a>arv_restauracao <span class="ot">&lt;-</span> arv_metrics <span class="sc">%&gt;%</span></span>
+<span id="cb74-3"><a href=""></a>  <span class="fu">mutate</span>(</span>
+<span id="cb74-4"><a href=""></a>    <span class="at">degree_norm =</span> (degree <span class="sc">-</span> <span class="fu">min</span>(degree)) <span class="sc">/</span> (<span class="fu">max</span>(degree) <span class="sc">-</span> <span class="fu">min</span>(degree)),</span>
+<span id="cb74-5"><a href=""></a>    <span class="at">strength_norm =</span> (species.strength <span class="sc">-</span> <span class="fu">min</span>(species.strength)) <span class="sc">/</span></span>
+<span id="cb74-6"><a href=""></a>                    (<span class="fu">max</span>(species.strength) <span class="sc">-</span> <span class="fu">min</span>(species.strength)),</span>
+<span id="cb74-7"><a href=""></a>    <span class="co"># Priorizamos diversidade de visitantes (grau)</span></span>
+<span id="cb74-8"><a href=""></a>    <span class="at">indice_restauracao =</span> (degree_norm <span class="sc">*</span> <span class="fl">0.7</span>) <span class="sc">+</span> (strength_norm <span class="sc">*</span> <span class="fl">0.3</span>),</span>
+<span id="cb74-9"><a href=""></a>    <span class="at">categoria =</span> <span class="fu">case_when</span>(</span>
+<span id="cb74-10"><a href=""></a>      indice_restauracao <span class="sc">&gt;=</span> <span class="fl">0.75</span> <span class="sc">~</span> <span class="st">"Prioritária"</span>,</span>
+<span id="cb74-11"><a href=""></a>      indice_restauracao <span class="sc">&gt;=</span> <span class="fl">0.50</span> <span class="sc">~</span> <span class="st">"Importante"</span>,</span>
+<span id="cb74-12"><a href=""></a>      indice_restauracao <span class="sc">&gt;=</span> <span class="fl">0.25</span> <span class="sc">~</span> <span class="st">"Complementar"</span>,</span>
+<span id="cb74-13"><a href=""></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Opcional"</span></span>
+<span id="cb74-14"><a href=""></a>    )</span>
+<span id="cb74-15"><a href=""></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb74-16"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(indice_restauracao))</span>
+<span id="cb74-17"><a href=""></a></span>
+<span id="cb74-18"><a href=""></a><span class="co"># Top 12 para restauração</span></span>
+<span id="cb74-19"><a href=""></a>arv_restauracao <span class="sc">%&gt;%</span></span>
+<span id="cb74-20"><a href=""></a>  <span class="fu">head</span>(<span class="dv">12</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb74-21"><a href=""></a>  <span class="fu">select</span>(especie, degree, indice_restauracao, categoria)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                            especie degree indice_restauracao
+Sebastiania commersoniana Sebastiania commersoniana     16          1.0000000
+Araucaria angustifolia       Araucaria angustifolia     13          0.8166903
+Eugenia uniflora                   Eugenia uniflora     12          0.6777519
+Myrcianthes pungens             Myrcianthes pungens     11          0.6123052
+Casearia decandra                 Casearia decandra     11          0.6083786
+Zanthoxylum rhoifolium       Zanthoxylum rhoifolium     10          0.5420114
+Ilex theezans                         Ilex theezans     10          0.5379515
+Roupala montana                     Roupala montana     11          0.5362210
+Prunus myrtifolia                 Prunus myrtifolia      9          0.4851553
+Solanum variabile                 Solanum variabile      9          0.4653010
+Ilex paraguariensis             Ilex paraguariensis      9          0.4496813
+Styrax leprosus                     Styrax leprosus     10          0.4440366
+                             categoria
+Sebastiania commersoniana  Prioritária
+Araucaria angustifolia     Prioritária
+Eugenia uniflora            Importante
+Myrcianthes pungens         Importante
+Casearia decandra           Importante
+Zanthoxylum rhoifolium      Importante
+Ilex theezans               Importante
+Roupala montana             Importante
+Prunus myrtifolia         Complementar
+Solanum variabile         Complementar
+Ilex paraguariensis       Complementar
+Styrax leprosus           Complementar</code></pre>
+</div>
+</div>
+</section>
+<section id="fases-de-restauração" class="slide level2">
+<h2>Fases de Restauração</h2>
+<p><strong>Sequência temporal de plantio:</strong></p>
+<ol type="1">
+<li><strong>Prioritárias</strong> (anos 1-2)
+<ul>
+<li>Atraem maior diversidade de dispersores</li>
+<li>Iniciam cascata de regeneração</li>
+</ul></li>
+<li><strong>Importantes</strong> (anos 3-5)
+<ul>
+<li>Complementam recursos ao longo do ano</li>
+<li>Suportam espécies especialistas</li>
+</ul></li>
+<li><strong>Complementares</strong> (anos 5+)
+<ul>
+<li>Preenchem nichos vazios</li>
+<li>Completam a estrutura da rede</li>
+</ul></li>
+</ol>
+</section>
+<section id="aplicação-3-simulação-de-extinção" class="slide level2">
+<h2>Aplicação 3: Simulação de Extinção ⚠️</h2>
+<p><strong>O que acontece se perdermos uma espécie-chave?</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href=""></a><span class="co"># Função simples de simulação</span></span>
+<span id="cb76-2"><a href=""></a>simular_extincao <span class="ot">&lt;-</span> <span class="cf">function</span>(matriz, especie) {</span>
+<span id="cb76-3"><a href=""></a>  <span class="cf">if</span>(<span class="sc">!</span>especie <span class="sc">%in%</span> <span class="fu">rownames</span>(matriz)) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb76-4"><a href=""></a></span>
+<span id="cb76-5"><a href=""></a>  <span class="co"># Remover espécie e plantas órfãs</span></span>
+<span id="cb76-6"><a href=""></a>  matriz_nova <span class="ot">&lt;-</span> matriz[<span class="fu">rownames</span>(matriz) <span class="sc">!=</span> especie, ]</span>
+<span id="cb76-7"><a href=""></a>  matriz_nova <span class="ot">&lt;-</span> matriz_nova[, <span class="fu">colSums</span>(matriz_nova) <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb76-8"><a href=""></a></span>
+<span id="cb76-9"><a href=""></a>  <span class="co"># Calcular impacto</span></span>
+<span id="cb76-10"><a href=""></a>  <span class="fu">list</span>(</span>
+<span id="cb76-11"><a href=""></a>    <span class="at">plantas_perdidas =</span> <span class="fu">ncol</span>(matriz) <span class="sc">-</span> <span class="fu">ncol</span>(matriz_nova),</span>
+<span id="cb76-12"><a href=""></a>    <span class="at">metricas =</span> <span class="fu">networklevel</span>(matriz_nova, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"H2"</span>, <span class="st">"weighted NODF"</span>))</span>
+<span id="cb76-13"><a href=""></a>  )</span>
+<span id="cb76-14"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Conceito:</strong> Remover espécie e recalcular métricas da rede</p>
+</section>
+<section id="resultado-da-simulação" class="slide level2">
+<h2>Resultado da Simulação</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a><span class="co"># Simular extinção de espécie prioritária</span></span>
+<span id="cb77-2"><a href=""></a>metricas_orig <span class="ot">&lt;-</span> <span class="fu">networklevel</span>(matriz_frugivoria, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"H2"</span>, <span class="st">"weighted NODF"</span>))</span>
+<span id="cb77-3"><a href=""></a>especie_teste <span class="ot">&lt;-</span> frug_prioridade<span class="sc">$</span>especie[</span>
+<span id="cb77-4"><a href=""></a>  frug_prioridade<span class="sc">$</span>especie <span class="sc">%in%</span> <span class="fu">rownames</span>(matriz_frugivoria)</span>
+<span id="cb77-5"><a href=""></a>][<span class="dv">1</span>]</span>
+<span id="cb77-6"><a href=""></a>resultado <span class="ot">&lt;-</span> <span class="fu">simular_extincao</span>(matriz_frugivoria, especie_teste)</span>
+<span id="cb77-7"><a href=""></a></span>
+<span id="cb77-8"><a href=""></a><span class="co"># Impacto</span></span>
+<span id="cb77-9"><a href=""></a><span class="fu">cat</span>(<span class="st">"Espécie:"</span>, especie_teste, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Espécie: Ramphastos dicolorus </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Plantas perdidas:"</span>, resultado<span class="sc">$</span>plantas_perdidas, <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Plantas perdidas: 0 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"H2:"</span>, <span class="fu">round</span>(metricas_orig[<span class="st">"H2"</span>], <span class="dv">3</span>), <span class="st">"→"</span>, <span class="fu">round</span>(resultado<span class="sc">$</span>metricas[<span class="st">"H2"</span>], <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>H2: 0.4 → 0.424 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"NODF:"</span>, <span class="fu">round</span>(metricas_orig[<span class="st">"weighted NODF"</span>], <span class="dv">1</span>), <span class="st">"→"</span>,</span>
+<span id="cb83-2"><a href=""></a>    <span class="fu">round</span>(resultado<span class="sc">$</span>metricas[<span class="st">"weighted NODF"</span>], <span class="dv">1</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NODF: 15.8 → 14 </code></pre>
+</div>
+</div>
+</section>
+<section id="aplicação-4-defaunação-e-fragmentação" class="slide level2">
+<h2>Aplicação 4: Defaunação e Fragmentação 🗺️</h2>
+<p><strong>Cenário:</strong> Fragmentos florestais perdem grandes frugívoros (mamíferos são mais vulneráveis)</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a><span class="co"># Simular defaunação: mamíferos desaparecem primeiro</span></span>
+<span id="cb85-2"><a href=""></a><span class="co"># (mais sensíveis à fragmentação, caça e área reduzida)</span></span>
+<span id="cb85-3"><a href=""></a>mamiferos_rede <span class="ot">&lt;-</span> <span class="fu">rownames</span>(matriz_frugivoria)[</span>
+<span id="cb85-4"><a href=""></a>  <span class="fu">rownames</span>(matriz_frugivoria) <span class="sc">%in%</span> mamiferos</span>
+<span id="cb85-5"><a href=""></a>]</span>
+<span id="cb85-6"><a href=""></a></span>
+<span id="cb85-7"><a href=""></a><span class="fu">cat</span>(<span class="st">"Mamíferos na rede original:"</span>, <span class="fu">length</span>(mamiferos_rede), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mamíferos na rede original: 13 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Simulação: perder TODOS os mamíferos</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simulação: perder TODOS os mamíferos</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a><span class="co"># Criar matriz sem mamíferos (área fragmentada)</span></span>
+<span id="cb89-2"><a href=""></a>matriz_fragmento <span class="ot">&lt;-</span> matriz_frugivoria[</span>
+<span id="cb89-3"><a href=""></a>  <span class="sc">!</span><span class="fu">rownames</span>(matriz_frugivoria) <span class="sc">%in%</span> mamiferos_rede,</span>
+<span id="cb89-4"><a href=""></a>]</span>
+<span id="cb89-5"><a href=""></a>matriz_fragmento <span class="ot">&lt;-</span> matriz_fragmento[, <span class="fu">colSums</span>(matriz_fragmento) <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb89-6"><a href=""></a></span>
+<span id="cb89-7"><a href=""></a><span class="fu">cat</span>(<span class="st">"Espécies restantes:"</span>, <span class="fu">nrow</span>(matriz_fragmento), <span class="st">"(só aves)</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Espécies restantes: 24 (só aves)</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Plantas que perderam dispersores:"</span>, <span class="fu">ncol</span>(matriz_frugivoria) <span class="sc">-</span> <span class="fu">ncol</span>(matriz_fragmento), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Plantas que perderam dispersores: 0 </code></pre>
+</div>
+</div>
+</section>
+<section id="impacto-na-estrutura-da-rede" class="slide level2">
+<h2>Impacto na Estrutura da Rede</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href=""></a><span class="co"># Comparar métricas</span></span>
+<span id="cb93-2"><a href=""></a>met_intacta <span class="ot">&lt;-</span> <span class="fu">networklevel</span>(matriz_frugivoria, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"H2"</span>, <span class="st">"NODF"</span>))</span>
+<span id="cb93-3"><a href=""></a>met_fragmento <span class="ot">&lt;-</span> <span class="fu">networklevel</span>(matriz_fragmento, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"H2"</span>, <span class="st">"NODF"</span>))</span>
+<span id="cb93-4"><a href=""></a></span>
+<span id="cb93-5"><a href=""></a><span class="fu">cat</span>(<span class="st">"Área Intacta → Fragmento (só aves):</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Área Intacta → Fragmento (só aves):</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"H2:"</span>, <span class="fu">round</span>(met_intacta[<span class="st">"H2"</span>], <span class="dv">2</span>), <span class="st">"→"</span>, <span class="fu">round</span>(met_fragmento[<span class="st">"H2"</span>], <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>H2: 0.4 → 0.38 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"NODF:"</span>, <span class="fu">round</span>(met_intacta[<span class="st">"NODF"</span>], <span class="dv">1</span>), <span class="st">"→"</span>, <span class="fu">round</span>(met_fragmento[<span class="st">"NODF"</span>], <span class="dv">1</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NODF: 28.6 → 32.9 </code></pre>
+</div>
+</div>
+<p><strong>Interpretação:</strong> Perda de mamíferos = perda de função ecológica completa</p>
+</section></section>
+<section>
+<section id="síntese" class="title-slide slide level1 center" data-background-color="#2C5F2D">
+<h1>Síntese</h1>
+
+</section>
+<section id="o-que-aprendemos" class="slide level2">
+<h2>O que aprendemos</h2>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><strong>Conceitos</strong></p>
+<ul>
+<li>Redes bipartidas</li>
+<li>Aninhamento</li>
+<li>Especialização</li>
+<li>Modelos nulos</li>
+</ul>
+</div><div class="column" style="width:33%;">
+<p><strong>Métricas</strong></p>
+<ul>
+<li>H2 (especialização)</li>
+<li>NODF (aninhamento)</li>
+<li>Grau, Força, PDI</li>
+<li>Testes de significância</li>
+</ul>
+</div><div class="column" style="width:33%;">
+<p><strong>Aplicações</strong></p>
+<ul>
+<li>Conservação</li>
+<li>Restauração</li>
+<li>Extinções</li>
+<li>Defaunação</li>
+</ul>
+</div></div>
+<p><strong>Ferramenta:</strong> Pacote <code>bipartite</code> (R)</p>
+</section>
+<section id="obrigado" class="slide level2">
+<h2>Obrigado!</h2>
+<p><strong>Dúvidas?</strong></p>
+<p>Contato: <strong>higuchip@gmail.com</strong></p>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>PPGEF/UDESC</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="index_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="index_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="index_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="index_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="index_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="index_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true,"width":"normal"},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1400,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
