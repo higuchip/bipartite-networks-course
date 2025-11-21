@@ -1,10 +1,29 @@
-# Curso: Análise de Redes Ecológicas Bipartidas com R
+# Curso: Análise de Redes Ecológicas Bipartidas com R <img src="index_files/hex_sticker.png" align="right" height="138" alt="Hex Sticker" />
+
+![Status](https://img.shields.io/badge/Status-Concluído-success)
+![R Version](https://img.shields.io/badge/R-%3E%3D4.0-blue)
+![License](https://img.shields.io/badge/License-CC--BY--4.0-lightgrey)
+
+<div align="center">
+  <h3><a href="https://higuchip.github.io/bipartite-networks-course">🔗 <strong>Clique aqui para ver a apresentação online</strong></a></h3>
+</div>
 
 Material didático para análise de redes de interações ecológicas.
 
 ## 📚 Sobre o Curso
 
 Este material foi desenvolvido para a disciplina **Descrição e Análise da Vegetação** do Programa de Pós-Graduação em Engenharia Florestal (PPGEF/UDESC). O curso apresenta conceitos fundamentais de redes ecológicas e suas aplicações práticas em conservação e restauração florestal.
+
+## 📂 Estrutura do Projeto
+
+```text
+.
+├── index.qmd          # Código fonte da apresentação (R + Texto)
+├── index.html         # Apresentação renderizada (pronta para uso)
+├── custom.css         # Estilos personalizados
+├── index_files/       # Gráficos e recursos gerados
+└── README.md          # Este arquivo
+```
 
 ## 🎯 Objetivos de Aprendizagem
 
@@ -59,6 +78,10 @@ Ao final do curso, você será capaz de:
 - R (versão ≥ 4.0)
 - RStudio (recomendado)
 - Quarto (para renderizar a apresentação)
+
+### Detalhes Técnicos
+- **Codificação**: UTF-8
+- **Pacotes Principais**: `bipartite`, `igraph`, `vegan`, `ggplot2`
 
 ### Pacotes do R:
 ```r
@@ -119,6 +142,21 @@ O curso utiliza como modelo a **Floresta Ombrófila Mista** (Floresta com Arauc�
 
 Programa de Pós-Graduação em Engenharia Florestal
 Universidade do Estado de Santa Catarina (UDESC)
+
+## 📝 Como Citar
+
+Se você utilizar este material, por favor cite:
+
+```bibtex
+@misc{higuchi2025redes,
+  author = {Higuchi, Pedro},
+  title = {Análise de Redes Ecológicas Bipartidas com R},
+  year = {2025},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/higuchip/bipartite-networks-course}}
+}
+```
 
 ## 📄 Licença
 
