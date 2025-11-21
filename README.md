@@ -1,14 +1,22 @@
-# Curso: Análise de Redes Ecológicas Bipartidas com R <img src="index_files/hex_sticker.png" align="right" height="138" alt="Hex Sticker" />
-
-![Status](https://img.shields.io/badge/Status-Concluído-success)
-![R Version](https://img.shields.io/badge/R-%3E%3D4.0-blue)
-![License](https://img.shields.io/badge/License-CC--BY--4.0-lightgrey)
-
 <div align="center">
-  <h3><a href="https://higuchip.github.io/bipartite-networks-course">🔗 <strong>Clique aqui para ver a apresentação online</strong></a></h3>
-</div>
+  <img src="index_files/hex_sticker.png" height="180" alt="Hex Sticker" />
 
-Material didático para análise de redes de interações ecológicas.
+  # Análise de Redes Ecológicas Bipartidas com R
+
+  ![Status](https://img.shields.io/badge/Status-Concluído-success)
+  ![R Version](https://img.shields.io/badge/R-%3E%3D4.0-blue)
+  ![License](https://img.shields.io/badge/License-CC--BY--4.0-lightgrey)
+
+  <p>
+    <strong>Material didático para análise de redes de interações ecológicas.</strong>
+  </p>
+
+  <h3>
+    <a href="https://higuchip.github.io/bipartite-networks-course">
+      🚀 Clique aqui para ver a apresentação online
+    </a>
+  </h3>
+</div>
 
 ## 📚 Sobre o Curso
 
