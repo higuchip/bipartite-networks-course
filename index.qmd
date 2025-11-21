@@ -34,6 +34,11 @@ format:
     menu:
       side: left
       width: normal
+    title-slide-attributes:
+      data-background-image: "index_files/hex_sticker.png"
+      data-background-size: "20%"
+      data-background-position: "95% 5%"
+      data-background-opacity: "0.9"
 execute:
   echo: true
   warning: false
@@ -1265,6 +1270,11 @@ legend("topright",
 
 ## Aplicação 1: Priorização para Conservação 🛡️
 
+::: {.callout-important appearance="simple"}
+## 🧠 Reflexão Crítica
+**"Prioridade" é subjetivo!** Este índice favorece a **estrutura da rede** (Generalistas). Outros objetivos podem focar em espécies **raras** ou **insubstituíveis**.
+:::
+
 **Como identificar espécies-chave para conservação?**
 
 ::::: columns
@@ -1286,6 +1296,10 @@ legend("topright",
 :::
 :::::
 
+
+
+## Aplicação 1: Cálculo do Índice 🧮
+
 ```{r}
 # Criar índice de prioridade
 frug_prioridade <- frug_metrics %>%
@@ -1303,17 +1317,27 @@ frug_prioridade <- frug_metrics %>%
   ) %>%
   arrange(desc(prioridade))
 
+```
+
+## Aplicação 1: Resultados 📊
+
+```{r}
 # Top 10 prioritários
 frug_prioridade %>%
   head(10) %>%
-  select(especie, degree, species.strength, prioridade, categoria)
+  select(especie, degree, species.strength, prioridade, categoria) %>%
+  kable(digits = 3, caption = "Espécies Prioritárias para Conservação")
 ```
+
+
 
 ## Aplicação 2: Planejamento de Restauração 🌱
 
 **Quais espécies arbóreas plantar primeiro?**
 
 **Critério:** Árvores visitadas por muitos frugívoros diferentes
+
+## Aplicação 2: Cálculo do Índice 🧮
 
 ```{r}
 # Criar índice de restauração
@@ -1332,12 +1356,30 @@ arv_restauracao <- arv_metrics %>%
     )
   ) %>%
   arrange(desc(indice_restauracao))
+```
 
+## Aplicação 2: Resultados 📊
+
+```{r}
 # Top 12 para restauração
 arv_restauracao %>%
   head(12) %>%
-  select(especie, degree, indice_restauracao, categoria)
+  select(especie, degree, indice_restauracao, categoria) %>%
+  kable(digits = 3, caption = "Espécies Prioritárias para Restauração")
 ```
+
+## Reflexão: Pontos de Atenção 🧠
+
+::: {.callout-warning appearance="simple"}
+## 1. O Gargalo Temporal (Fenologia) ⏳
+Este índice seleciona espécies que atraem muitos animais, mas **ignora quando elas frutificam**.
+**Risco:** Se todas as prioritárias frutificarem no verão, a fauna ficará sem alimento no inverno.
+:::
+
+::: {.callout-tip appearance="simple"}
+## 2. Espécies Funcionais Específicas 🐦
+Algumas árvores têm baixo grau (poucos visitantes), mas são essenciais para **dispersores especialistas** (ex: Tucanos e Jacutingas) que carregam sementes grandes de árvores clímax.
+:::
 
 ## Fases de Restauração
 
@@ -1356,6 +1398,8 @@ arv_restauracao %>%
 ## Aplicação 3: Simulação de Extinção ⚠️
 
 **O que acontece se perdermos uma espécie-chave?**
+
+## Aplicação 3: Código da Simulação 💻
 
 ```{r}
 # Função simples de simulação
@@ -1376,7 +1420,7 @@ simular_extincao <- function(matriz, especie) {
 
 **Conceito:** Remover espécie e recalcular métricas da rede
 
-## Resultado da Simulação
+## Aplicação 3: Resultado da Simulação 📉
 
 ```{r}
 # Simular extinção de espécie prioritária
@@ -1394,9 +1438,25 @@ cat("NODF:", round(metricas_orig["weighted NODF"], 1), "→",
     round(resultado$metricas["weighted NODF"], 1), "\n")
 ```
 
+## Reflexão: Limitações da Simulação 🧠
+
+::: {.callout-warning appearance="simple"}
+## 1. O Modelo é Estático (Pior Cenário) 🛑
+Esta simulação assume que se o parceiro some, a planta morre imediatamente.
+**Realidade:** Na natureza, existe o **Recabeamento (Rewiring)**. Outros animais podem mudar de comportamento e passar a consumir os frutos da planta "órfã", amortecendo o impacto.
+:::
+
+::: {.callout-important appearance="simple"}
+## 2. Extinção Funcional vs. Numérica 📉
+O impacto ecológico começa muito antes da espécie desaparecer totalmente. Quando a população cai abaixo de um certo nível, ela já deixa de cumprir sua função na rede (dispersão efetiva).
+:::
+
+
 ## Aplicação 4: Defaunação e Fragmentação 🗺️
 
 **Cenário:** Fragmentos florestais perdem grandes frugívoros (mamíferos são mais vulneráveis)
+
+## Aplicação 4: Código da Simulação 💻
 
 ```{r}
 # Simular defaunação: mamíferos desaparecem primeiro
@@ -1405,15 +1465,18 @@ mamiferos_rede <- rownames(matriz_frugivoria)[
   rownames(matriz_frugivoria) %in% mamiferos
 ]
 
-cat("Mamíferos na rede original:", length(mamiferos_rede), "\n")
-cat("Simulação: perder TODOS os mamíferos\n\n")
-
 # Criar matriz sem mamíferos (área fragmentada)
 matriz_fragmento <- matriz_frugivoria[
   !rownames(matriz_frugivoria) %in% mamiferos_rede,
 ]
 matriz_fragmento <- matriz_fragmento[, colSums(matriz_fragmento) > 0]
+```
 
+## Aplicação 4: Resultados da Defaunação 📉
+
+```{r}
+cat("Mamíferos na rede original:", length(mamiferos_rede), "\n")
+cat("Simulação: perder TODOS os mamíferos\n\n")
 cat("Espécies restantes:", nrow(matriz_fragmento), "(só aves)\n")
 cat("Plantas que perderam dispersores:", ncol(matriz_frugivoria) - ncol(matriz_fragmento), "\n")
 ```
@@ -1427,8 +1490,24 @@ met_fragmento <- networklevel(matriz_fragmento, index = c("H2", "NODF"))
 
 cat("Área Intacta → Fragmento (só aves):\n\n")
 cat("H2:", round(met_intacta["H2"], 2), "→", round(met_fragmento["H2"], 2), "\n")
-cat("NODF:", round(met_intacta["NODF"], 1), "→", round(met_fragmento["NODF"], 1), "\n")
+cat("NODF:", round(met_intacta["NODF"], 2), "→", round(met_fragmento["NODF"], 2), "\n")
 ```
+
+## Reflexão: A Floresta Vazia 👻
+
+::: {.callout-important appearance="simple"}
+## 1. Extinção Não-Aleatória 🎯
+A perda de mamíferos não é sorteio. Eles são os primeiros a sumir (caça/área).
+**Consequência:** Perda de funções específicas que aves pequenas não substituem.
+:::
+
+::: {.callout-warning appearance="simple"}
+## 2. Qualidade da Dispersão 📉
+O código mostra *quantas* plantas perdem dispersores, mas o problema real é *quais*.
+Sem mamíferos, árvores de sementes grandes (Clímax) ficam sem dispersão, levando à **Síndrome da Floresta Vazia**.
+:::
+
+
 
 **Interpretação:** Perda de mamíferos = perda de função ecológica completa
 
@@ -1467,9 +1546,20 @@ cat("NODF:", round(met_intacta["NODF"], 1), "→", round(met_fragmento["NODF"], 
 
 **Ferramenta:** Pacote `bipartite` (R)
 
-## Obrigado!
+## Obrigado! {.center}
 
-**Dúvidas?**
+::::: columns
+::: {.column width="40%"}
+![](index_files/hex_sticker.png){width=80%}
+:::
 
-Contato: **higuchip@gmail.com**
+::: {.column width="60%"}
+### **Dúvidas?**
+
+📧 **Contato:** higuchip@gmail.com
+🐙 **GitHub:** [github.com/higuchip](https://github.com/higuchip)
+🌐 **Material:** [higuchip.github.io/bipartite-networks-course](https://higuchip.github.io/bipartite-networks-course)
+
+:::
+:::::
 

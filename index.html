@@ -193,7 +193,7 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-image="index_files/hex_sticker.png" data-background-opacity="0.9" data-background-position="95% 5%" data-background-size="20%" class="quarto-title-block center">
   <h1 class="title">Análise de Redes Ecológicas Bipartidas</h1>
   <p class="subtitle">Ferramentas para Conservação e Restauração</p>
 
@@ -1825,6 +1825,19 @@ H2 0.3999375 0.09745422 0.09660413 0.09830431 -706.0342 4.456483e-185</code></pr
 </section>
 <section id="aplicação-1-priorização-para-conservação" class="slide level2">
 <h2>Aplicação 1: Priorização para Conservação 🛡️</h2>
+<div class="callout callout-important callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>🧠 Reflexão Crítica</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>“Prioridade” é subjetivo!</strong> Este índice favorece a <strong>estrutura da rede</strong> (Generalistas). Outros objetivos podem focar em espécies <strong>raras</strong> ou <strong>insubstituíveis</strong>.</p>
+</div>
+</div>
+</div>
 <p><strong>Como identificar espécies-chave para conservação?</strong></p>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -1843,6 +1856,9 @@ H2 0.3999375 0.09745422 0.09660413 0.09830431 -706.0342 4.456483e-185</code></pr
 <li>Baixo: &lt; 0.25</li>
 </ul>
 </div></div>
+</section>
+<section id="aplicação-1-cálculo-do-índice" class="slide level2">
+<h2>Aplicação 1: Cálculo do Índice 🧮</h2>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a><span class="co"># Criar índice de prioridade</span></span>
 <span id="cb72-2"><a href=""></a>frug_prioridade <span class="ot">&lt;-</span> frug_metrics <span class="sc">%&gt;%</span></span>
@@ -1858,35 +1874,121 @@ H2 0.3999375 0.09745422 0.09660413 0.09830431 -706.0342 4.456483e-185</code></pr
 <span id="cb72-12"><a href=""></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Baixo"</span></span>
 <span id="cb72-13"><a href=""></a>    )</span>
 <span id="cb72-14"><a href=""></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb72-15"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(prioridade))</span>
-<span id="cb72-16"><a href=""></a></span>
-<span id="cb72-17"><a href=""></a><span class="co"># Top 10 prioritários</span></span>
-<span id="cb72-18"><a href=""></a>frug_prioridade <span class="sc">%&gt;%</span></span>
-<span id="cb72-19"><a href=""></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb72-20"><a href=""></a>  <span class="fu">select</span>(especie, degree, species.strength, prioridade, categoria)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                                        especie degree species.strength
-Ramphastos dicolorus       Ramphastos dicolorus     20        4.4874924
-Amazona vinacea                 Amazona vinacea     16        3.2481745
-Cyanocorax caeruleus       Cyanocorax caeruleus     15        2.8636236
-Amazona pretrei                 Amazona pretrei     13        2.7343504
-Tyrannus melancholicus   Tyrannus melancholicus     11        1.1880924
-Myiodynastes maculatus   Myiodynastes maculatus     11        1.1683442
-Leucochloris albicollis Leucochloris albicollis     11        1.0104944
-Tangara sayaca                   Tangara sayaca     10        0.8942238
-Pyroderus scutatus           Pyroderus scutatus     10        0.8837958
-Dacnis cayana                     Dacnis cayana      9        0.9557244
-                        prioridade categoria
-Ramphastos dicolorus     1.0000000   Crítico
-Amazona vinacea          0.7423488      Alto
-Cyanocorax caeruleus     0.6677610      Alto
-Amazona pretrei          0.6057129      Alto
-Tyrannus melancholicus   0.3507091     Médio
-Myiodynastes maculatus   0.3480199     Médio
-Leucochloris albicollis  0.3265250     Médio
-Tangara sayaca           0.2884698     Médio
-Pyroderus scutatus       0.2870498     Médio
-Dacnis cayana            0.2746223     Médio</code></pre>
+<span id="cb72-15"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(prioridade))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="aplicação-1-resultados" class="slide level2">
+<h2>Aplicação 1: Resultados 📊</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a><span class="co"># Top 10 prioritários</span></span>
+<span id="cb73-2"><a href=""></a>frug_prioridade <span class="sc">%&gt;%</span></span>
+<span id="cb73-3"><a href=""></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb73-4"><a href=""></a>  <span class="fu">select</span>(especie, degree, species.strength, prioridade, categoria) <span class="sc">%&gt;%</span></span>
+<span id="cb73-5"><a href=""></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Espécies Prioritárias para Conservação"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Espécies Prioritárias para Conservação</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 7%">
+<col style="width: 18%">
+<col style="width: 11%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">especie</th>
+<th style="text-align: right;">degree</th>
+<th style="text-align: right;">species.strength</th>
+<th style="text-align: right;">prioridade</th>
+<th style="text-align: left;">categoria</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Ramphastos dicolorus</td>
+<td style="text-align: left;">Ramphastos dicolorus</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">4.487</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: left;">Crítico</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Amazona vinacea</td>
+<td style="text-align: left;">Amazona vinacea</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">3.248</td>
+<td style="text-align: right;">0.742</td>
+<td style="text-align: left;">Alto</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cyanocorax caeruleus</td>
+<td style="text-align: left;">Cyanocorax caeruleus</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">2.864</td>
+<td style="text-align: right;">0.668</td>
+<td style="text-align: left;">Alto</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Amazona pretrei</td>
+<td style="text-align: left;">Amazona pretrei</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">2.734</td>
+<td style="text-align: right;">0.606</td>
+<td style="text-align: left;">Alto</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tyrannus melancholicus</td>
+<td style="text-align: left;">Tyrannus melancholicus</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.188</td>
+<td style="text-align: right;">0.351</td>
+<td style="text-align: left;">Médio</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Myiodynastes maculatus</td>
+<td style="text-align: left;">Myiodynastes maculatus</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.168</td>
+<td style="text-align: right;">0.348</td>
+<td style="text-align: left;">Médio</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Leucochloris albicollis</td>
+<td style="text-align: left;">Leucochloris albicollis</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1.010</td>
+<td style="text-align: right;">0.327</td>
+<td style="text-align: left;">Médio</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tangara sayaca</td>
+<td style="text-align: left;">Tangara sayaca</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.894</td>
+<td style="text-align: right;">0.288</td>
+<td style="text-align: left;">Médio</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pyroderus scutatus</td>
+<td style="text-align: left;">Pyroderus scutatus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.884</td>
+<td style="text-align: right;">0.287</td>
+<td style="text-align: left;">Médio</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dacnis cayana</td>
+<td style="text-align: left;">Dacnis cayana</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.956</td>
+<td style="text-align: right;">0.275</td>
+<td style="text-align: left;">Médio</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </section>
@@ -1894,6 +1996,9 @@ Dacnis cayana            0.2746223     Médio</code></pre>
 <h2>Aplicação 2: Planejamento de Restauração 🌱</h2>
 <p><strong>Quais espécies arbóreas plantar primeiro?</strong></p>
 <p><strong>Critério:</strong> Árvores visitadas por muitos frugívoros diferentes</p>
+</section>
+<section id="aplicação-2-cálculo-do-índice" class="slide level2">
+<h2>Aplicação 2: Cálculo do Índice 🧮</h2>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a><span class="co"># Criar índice de restauração</span></span>
 <span id="cb74-2"><a href=""></a>arv_restauracao <span class="ot">&lt;-</span> arv_metrics <span class="sc">%&gt;%</span></span>
@@ -1910,39 +2015,152 @@ Dacnis cayana            0.2746223     Médio</code></pre>
 <span id="cb74-13"><a href=""></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Opcional"</span></span>
 <span id="cb74-14"><a href=""></a>    )</span>
 <span id="cb74-15"><a href=""></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb74-16"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(indice_restauracao))</span>
-<span id="cb74-17"><a href=""></a></span>
-<span id="cb74-18"><a href=""></a><span class="co"># Top 12 para restauração</span></span>
-<span id="cb74-19"><a href=""></a>arv_restauracao <span class="sc">%&gt;%</span></span>
-<span id="cb74-20"><a href=""></a>  <span class="fu">head</span>(<span class="dv">12</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb74-21"><a href=""></a>  <span class="fu">select</span>(especie, degree, indice_restauracao, categoria)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                                            especie degree indice_restauracao
-Sebastiania commersoniana Sebastiania commersoniana     16          1.0000000
-Araucaria angustifolia       Araucaria angustifolia     13          0.8166903
-Eugenia uniflora                   Eugenia uniflora     12          0.6777519
-Myrcianthes pungens             Myrcianthes pungens     11          0.6123052
-Casearia decandra                 Casearia decandra     11          0.6083786
-Zanthoxylum rhoifolium       Zanthoxylum rhoifolium     10          0.5420114
-Ilex theezans                         Ilex theezans     10          0.5379515
-Roupala montana                     Roupala montana     11          0.5362210
-Prunus myrtifolia                 Prunus myrtifolia      9          0.4851553
-Solanum variabile                 Solanum variabile      9          0.4653010
-Ilex paraguariensis             Ilex paraguariensis      9          0.4496813
-Styrax leprosus                     Styrax leprosus     10          0.4440366
-                             categoria
-Sebastiania commersoniana  Prioritária
-Araucaria angustifolia     Prioritária
-Eugenia uniflora            Importante
-Myrcianthes pungens         Importante
-Casearia decandra           Importante
-Zanthoxylum rhoifolium      Importante
-Ilex theezans               Importante
-Roupala montana             Importante
-Prunus myrtifolia         Complementar
-Solanum variabile         Complementar
-Ilex paraguariensis       Complementar
-Styrax leprosus           Complementar</code></pre>
+<span id="cb74-16"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(indice_restauracao))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="aplicação-2-resultados" class="slide level2">
+<h2>Aplicação 2: Resultados 📊</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a><span class="co"># Top 12 para restauração</span></span>
+<span id="cb75-2"><a href=""></a>arv_restauracao <span class="sc">%&gt;%</span></span>
+<span id="cb75-3"><a href=""></a>  <span class="fu">head</span>(<span class="dv">12</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb75-4"><a href=""></a>  <span class="fu">select</span>(especie, degree, indice_restauracao, categoria) <span class="sc">%&gt;%</span></span>
+<span id="cb75-5"><a href=""></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Espécies Prioritárias para Restauração"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Espécies Prioritárias para Restauração</caption>
+<colgroup>
+<col style="width: 28%">
+<col style="width: 28%">
+<col style="width: 7%">
+<col style="width: 20%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">especie</th>
+<th style="text-align: right;">degree</th>
+<th style="text-align: right;">indice_restauracao</th>
+<th style="text-align: left;">categoria</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sebastiania commersoniana</td>
+<td style="text-align: left;">Sebastiania commersoniana</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: left;">Prioritária</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Araucaria angustifolia</td>
+<td style="text-align: left;">Araucaria angustifolia</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0.817</td>
+<td style="text-align: left;">Prioritária</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Eugenia uniflora</td>
+<td style="text-align: left;">Eugenia uniflora</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.678</td>
+<td style="text-align: left;">Importante</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Myrcianthes pungens</td>
+<td style="text-align: left;">Myrcianthes pungens</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.612</td>
+<td style="text-align: left;">Importante</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Casearia decandra</td>
+<td style="text-align: left;">Casearia decandra</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.608</td>
+<td style="text-align: left;">Importante</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Zanthoxylum rhoifolium</td>
+<td style="text-align: left;">Zanthoxylum rhoifolium</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.542</td>
+<td style="text-align: left;">Importante</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ilex theezans</td>
+<td style="text-align: left;">Ilex theezans</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.538</td>
+<td style="text-align: left;">Importante</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Roupala montana</td>
+<td style="text-align: left;">Roupala montana</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.536</td>
+<td style="text-align: left;">Importante</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Prunus myrtifolia</td>
+<td style="text-align: left;">Prunus myrtifolia</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.485</td>
+<td style="text-align: left;">Complementar</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Solanum variabile</td>
+<td style="text-align: left;">Solanum variabile</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.465</td>
+<td style="text-align: left;">Complementar</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ilex paraguariensis</td>
+<td style="text-align: left;">Ilex paraguariensis</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.450</td>
+<td style="text-align: left;">Complementar</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Styrax leprosus</td>
+<td style="text-align: left;">Styrax leprosus</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.444</td>
+<td style="text-align: left;">Complementar</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="reflexão-pontos-de-atenção" class="slide level2">
+<h2>Reflexão: Pontos de Atenção 🧠</h2>
+<div class="callout callout-warning callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>1. O Gargalo Temporal (Fenologia) ⏳</strong></p>
+</div>
+<div class="callout-content">
+<p>Este índice seleciona espécies que atraem muitos animais, mas <strong>ignora quando elas frutificam</strong>. <strong>Risco:</strong> Se todas as prioritárias frutificarem no verão, a fauna ficará sem alimento no inverno.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>2. Espécies Funcionais Específicas 🐦</strong></p>
+</div>
+<div class="callout-content">
+<p>Algumas árvores têm baixo grau (poucos visitantes), mas são essenciais para <strong>dispersores especialistas</strong> (ex: Tucanos e Jacutingas) que carregam sementes grandes de árvores clímax.</p>
+</div>
 </div>
 </div>
 </section>
@@ -1970,6 +2188,9 @@ Styrax leprosus           Complementar</code></pre>
 <section id="aplicação-3-simulação-de-extinção" class="slide level2">
 <h2>Aplicação 3: Simulação de Extinção ⚠️</h2>
 <p><strong>O que acontece se perdermos uma espécie-chave?</strong></p>
+</section>
+<section id="aplicação-3-código-da-simulação" class="slide level2">
+<h2>Aplicação 3: Código da Simulação 💻</h2>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href=""></a><span class="co"># Função simples de simulação</span></span>
 <span id="cb76-2"><a href=""></a>simular_extincao <span class="ot">&lt;-</span> <span class="cf">function</span>(matriz, especie) {</span>
@@ -1988,8 +2209,8 @@ Styrax leprosus           Complementar</code></pre>
 </div>
 <p><strong>Conceito:</strong> Remover espécie e recalcular métricas da rede</p>
 </section>
-<section id="resultado-da-simulação" class="slide level2">
-<h2>Resultado da Simulação</h2>
+<section id="aplicação-3-resultado-da-simulação" class="slide level2">
+<h2>Aplicação 3: Resultado da Simulação 📉</h2>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a><span class="co"># Simular extinção de espécie prioritária</span></span>
 <span id="cb77-2"><a href=""></a>metricas_orig <span class="ot">&lt;-</span> <span class="fu">networklevel</span>(matriz_frugivoria, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"H2"</span>, <span class="st">"weighted NODF"</span>))</span>
@@ -2018,9 +2239,41 @@ Styrax leprosus           Complementar</code></pre>
 </div>
 </div>
 </section>
+<section id="reflexão-limitações-da-simulação" class="slide level2">
+<h2>Reflexão: Limitações da Simulação 🧠</h2>
+<div class="callout callout-warning callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>1. O Modelo é Estático (Pior Cenário) 🛑</strong></p>
+</div>
+<div class="callout-content">
+<p>Esta simulação assume que se o parceiro some, a planta morre imediatamente. <strong>Realidade:</strong> Na natureza, existe o <strong>Recabeamento (Rewiring)</strong>. Outros animais podem mudar de comportamento e passar a consumir os frutos da planta “órfã”, amortecendo o impacto.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-important callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>2. Extinção Funcional vs.&nbsp;Numérica 📉</strong></p>
+</div>
+<div class="callout-content">
+<p>O impacto ecológico começa muito antes da espécie desaparecer totalmente. Quando a população cai abaixo de um certo nível, ela já deixa de cumprir sua função na rede (dispersão efetiva).</p>
+</div>
+</div>
+</div>
+</section>
 <section id="aplicação-4-defaunação-e-fragmentação" class="slide level2">
 <h2>Aplicação 4: Defaunação e Fragmentação 🗺️</h2>
 <p><strong>Cenário:</strong> Fragmentos florestais perdem grandes frugívoros (mamíferos são mais vulneráveis)</p>
+</section>
+<section id="aplicação-4-código-da-simulação" class="slide level2">
+<h2>Aplicação 4: Código da Simulação 💻</h2>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a><span class="co"># Simular defaunação: mamíferos desaparecem primeiro</span></span>
 <span id="cb85-2"><a href=""></a><span class="co"># (mais sensíveis à fragmentação, caça e área reduzida)</span></span>
@@ -2028,25 +2281,29 @@ Styrax leprosus           Complementar</code></pre>
 <span id="cb85-4"><a href=""></a>  <span class="fu">rownames</span>(matriz_frugivoria) <span class="sc">%in%</span> mamiferos</span>
 <span id="cb85-5"><a href=""></a>]</span>
 <span id="cb85-6"><a href=""></a></span>
-<span id="cb85-7"><a href=""></a><span class="fu">cat</span>(<span class="st">"Mamíferos na rede original:"</span>, <span class="fu">length</span>(mamiferos_rede), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb85-7"><a href=""></a><span class="co"># Criar matriz sem mamíferos (área fragmentada)</span></span>
+<span id="cb85-8"><a href=""></a>matriz_fragmento <span class="ot">&lt;-</span> matriz_frugivoria[</span>
+<span id="cb85-9"><a href=""></a>  <span class="sc">!</span><span class="fu">rownames</span>(matriz_frugivoria) <span class="sc">%in%</span> mamiferos_rede,</span>
+<span id="cb85-10"><a href=""></a>]</span>
+<span id="cb85-11"><a href=""></a>matriz_fragmento <span class="ot">&lt;-</span> matriz_fragmento[, <span class="fu">colSums</span>(matriz_fragmento) <span class="sc">&gt;</span> <span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="aplicação-4-resultados-da-defaunação" class="slide level2">
+<h2>Aplicação 4: Resultados da Defaunação 📉</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Mamíferos na rede original:"</span>, <span class="fu">length</span>(mamiferos_rede), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mamíferos na rede original: 13 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Simulação: perder TODOS os mamíferos</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Simulação: perder TODOS os mamíferos</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simulação: perder TODOS os mamíferos</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a><span class="co"># Criar matriz sem mamíferos (área fragmentada)</span></span>
-<span id="cb89-2"><a href=""></a>matriz_fragmento <span class="ot">&lt;-</span> matriz_frugivoria[</span>
-<span id="cb89-3"><a href=""></a>  <span class="sc">!</span><span class="fu">rownames</span>(matriz_frugivoria) <span class="sc">%in%</span> mamiferos_rede,</span>
-<span id="cb89-4"><a href=""></a>]</span>
-<span id="cb89-5"><a href=""></a>matriz_fragmento <span class="ot">&lt;-</span> matriz_fragmento[, <span class="fu">colSums</span>(matriz_fragmento) <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
-<span id="cb89-6"><a href=""></a></span>
-<span id="cb89-7"><a href=""></a><span class="fu">cat</span>(<span class="st">"Espécies restantes:"</span>, <span class="fu">nrow</span>(matriz_fragmento), <span class="st">"(só aves)</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Espécies restantes:"</span>, <span class="fu">nrow</span>(matriz_fragmento), <span class="st">"(só aves)</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Espécies restantes: 24 (só aves)</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Plantas que perderam dispersores:"</span>, <span class="fu">ncol</span>(matriz_frugivoria) <span class="sc">-</span> <span class="fu">ncol</span>(matriz_fragmento), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"Plantas que perderam dispersores:"</span>, <span class="fu">ncol</span>(matriz_frugivoria) <span class="sc">-</span> <span class="fu">ncol</span>(matriz_fragmento), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Plantas que perderam dispersores: 0 </code></pre>
 </div>
@@ -2055,21 +2312,50 @@ Styrax leprosus           Complementar</code></pre>
 <section id="impacto-na-estrutura-da-rede" class="slide level2">
 <h2>Impacto na Estrutura da Rede</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href=""></a><span class="co"># Comparar métricas</span></span>
-<span id="cb93-2"><a href=""></a>met_intacta <span class="ot">&lt;-</span> <span class="fu">networklevel</span>(matriz_frugivoria, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"H2"</span>, <span class="st">"NODF"</span>))</span>
-<span id="cb93-3"><a href=""></a>met_fragmento <span class="ot">&lt;-</span> <span class="fu">networklevel</span>(matriz_fragmento, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"H2"</span>, <span class="st">"NODF"</span>))</span>
-<span id="cb93-4"><a href=""></a></span>
-<span id="cb93-5"><a href=""></a><span class="fu">cat</span>(<span class="st">"Área Intacta → Fragmento (só aves):</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href=""></a><span class="co"># Comparar métricas</span></span>
+<span id="cb94-2"><a href=""></a>met_intacta <span class="ot">&lt;-</span> <span class="fu">networklevel</span>(matriz_frugivoria, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"H2"</span>, <span class="st">"NODF"</span>))</span>
+<span id="cb94-3"><a href=""></a>met_fragmento <span class="ot">&lt;-</span> <span class="fu">networklevel</span>(matriz_fragmento, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"H2"</span>, <span class="st">"NODF"</span>))</span>
+<span id="cb94-4"><a href=""></a></span>
+<span id="cb94-5"><a href=""></a><span class="fu">cat</span>(<span class="st">"Área Intacta → Fragmento (só aves):</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Área Intacta → Fragmento (só aves):</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"H2:"</span>, <span class="fu">round</span>(met_intacta[<span class="st">"H2"</span>], <span class="dv">2</span>), <span class="st">"→"</span>, <span class="fu">round</span>(met_fragmento[<span class="st">"H2"</span>], <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"H2:"</span>, <span class="fu">round</span>(met_intacta[<span class="st">"H2"</span>], <span class="dv">2</span>), <span class="st">"→"</span>, <span class="fu">round</span>(met_fragmento[<span class="st">"H2"</span>], <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>H2: 0.4 → 0.38 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"NODF:"</span>, <span class="fu">round</span>(met_intacta[<span class="st">"NODF"</span>], <span class="dv">1</span>), <span class="st">"→"</span>, <span class="fu">round</span>(met_fragmento[<span class="st">"NODF"</span>], <span class="dv">1</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href=""></a><span class="fu">cat</span>(<span class="st">"NODF:"</span>, <span class="fu">round</span>(met_intacta[<span class="st">"NODF"</span>], <span class="dv">2</span>), <span class="st">"→"</span>, <span class="fu">round</span>(met_fragmento[<span class="st">"NODF"</span>], <span class="dv">2</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>NODF: 28.6 → 32.9 </code></pre>
+<pre><code>NODF: 28.64 → 32.88 </code></pre>
+</div>
+</div>
+</section>
+<section id="reflexão-a-floresta-vazia" class="slide level2">
+<h2>Reflexão: A Floresta Vazia 👻</h2>
+<div class="callout callout-important callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>1. Extinção Não-Aleatória 🎯</strong></p>
+</div>
+<div class="callout-content">
+<p>A perda de mamíferos não é sorteio. Eles são os primeiros a sumir (caça/área). <strong>Consequência:</strong> Perda de funções específicas que aves pequenas não substituem.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>2. Qualidade da Dispersão 📉</strong></p>
+</div>
+<div class="callout-content">
+<p>O código mostra <em>quantas</em> plantas perdem dispersores, mas o problema real é <em>quais</em>. Sem mamíferos, árvores de sementes grandes (Clímax) ficam sem dispersão, levando à <strong>Síndrome da Floresta Vazia</strong>.</p>
+</div>
 </div>
 </div>
 <p><strong>Interpretação:</strong> Perda de mamíferos = perda de função ecológica completa</p>
@@ -2109,10 +2395,15 @@ Styrax leprosus           Complementar</code></pre>
 </div></div>
 <p><strong>Ferramenta:</strong> Pacote <code>bipartite</code> (R)</p>
 </section>
-<section id="obrigado" class="slide level2">
+<section id="obrigado" class="slide level2 center">
 <h2>Obrigado!</h2>
-<p><strong>Dúvidas?</strong></p>
-<p>Contato: <strong>higuchip@gmail.com</strong></p>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><img data-src="index_files/hex_sticker.png" style="width:80.0%"></p>
+</div><div class="column" style="width:60%;">
+<h3 id="dúvidas"><strong>Dúvidas?</strong></h3>
+<p>📧 <strong>Contato:</strong> higuchip@gmail.com 🐙 <strong>GitHub:</strong> <a href="https://github.com/higuchip">github.com/higuchip</a> 🌐 <strong>Material:</strong> <a href="https://higuchip.github.io/bipartite-networks-course">higuchip.github.io/bipartite-networks-course</a></p>
+</div></div>
 
 </section></section>
     </div>
